@@ -1,0 +1,67 @@
+[
+  {
+    "id": "desktop-pos-application",
+    "title": "Desktop Point of Sale (POS) Application",
+    "subtitle": "An offline-first desktop cashier application built with Flutter for local retail businesses.",
+    "overview": "Designed and built a desktop cashier (Point of Sale) application from scratch using Flutter, designed specifically as an offline-first operational solution for retail stores and local businesses.",
+    "responsibilities": [
+      "Designed and built the desktop cashier (Point of Sale) application from scratch using Flutter, specifically customized as an offline-first operational solution for retail stores and local businesses.",
+      "Implemented a self-contained local monolith architecture, ensuring the application runs 100% without internet connection dependencies (standalone application) to guarantee cashier transaction stability.",
+      "Developed key features independently, including a responsive cashier system, real-time inventory stock management, automatic profit-loss report calculation, and thermal printer receipt integration.",
+      "Managed efficient local data storage using SQLite to ensure instant transaction data reading and writing processes with optimal memory consumption."
+    ],
+    "features": [
+      "Responsive cashier system custom-tailored for retail desktop layouts.",
+      "Real-time inventory and stock tracking management.",
+      "Automatic profit-loss calculation for instant financial statements.",
+      "Thermal printer receipt printing integration."
+    ],
+    "architecture": {
+      "description": "The system utilizes a local monolith architecture powered by SQLite embedded database. All transaction writes, reads, and reports aggregations are executed completely offline on the local device, guaranteeing instant operational speed and privacy."
+    },
+    "apiPreview": {
+      "language": "dart",
+      "code": "import 'package:sqflite/sqflite.dart';\n\nclass TransactionRepository {\n  final Database _db;\n  TransactionRepository(this._db);\n\n  Future<void> saveTransaction(Transaction tx) async {\n    await _db.transaction((txn) async {\n      // Insert main transaction row\n      await txn.insert('transactions', tx.toMap());\n      \n      // Deduct inventory stock for each item\n      for (var item in tx.items) {\n        await txn.rawUpdate(\n          'UPDATE products SET stock = stock - ? WHERE id = ?',\n          [item.quantity, item.productId],\n        );\n      }\n    });\n  }\n}"
+    },
+    "gallery": [],
+    "challenges": "Managing real-time inventory synchronization and profit-loss calculations on local SQLite storage without blocking the UI thread or consuming excessive memory during high-frequency checkout events.",
+    "solutions": "Optimized SQL queries using proper database indexing and utilized Dart background threads (Isolates) to perform heavy financial report calculations asynchronously.",
+    "lessonsLearned": "Learned the critical value of database optimization for offline-first local checkout transactions and memory management in Flutter-based desktop software.",
+    "techStack": ["Flutter", "Dart", "SQLite", "Desktop App", "Offline-first"],
+    "githubUrl": "https://github.com/example/desktop-pos",
+    "liveUrl": ""
+  },
+  {
+    "id": "anime-watch-tracker",
+    "title": "Anime Watch Tracker System",
+    "subtitle": "A cloud-synced multi-platform anime watching history tracker with Telegram bot integration.",
+    "overview": "Designed and implemented an integrated monitoring platform composed of a Google Chrome Extension (watch-tracker) to capture real-time watching events on Netflix, YouTube, and custom streaming domains, a backend API service (awt-api) hosted on Vercel, and a Supabase database with automated cloud cron notifications.",
+    "responsibilities": [
+      "Developed the Google Chrome Extension (watch-tracker) using TypeScript to inject event handlers into Netflix, YouTube, and generic HTML5 video players.",
+      "Built the serverless REST API (awt-api) using TypeScript and Node.js, deployed on Vercel, to receive telemetry reports periodically.",
+      "Integrated Supabase (PostgreSQL) database for local-first synchronization using a Universal Sync ID without requiring user accounts.",
+      "Created a Telegram Bot integration allowing users to link devices, view watching lists, and query upcoming episode schedules from AniList.",
+      "Configured Vercel Cron Jobs to check AniList schedules daily at 12:00 PM WIB and send notifications automatically to Telegram."
+    ],
+    "features": [
+      "Automated video player event listener (Netflix, YouTube, custom streaming domains).",
+      "Universal Sync ID for passwordless, secure multi-device synchronization.",
+      "Telegram Bot integration for watching lists (/list), episode updates (/new), and AniList schedules (/schedule).",
+      "Automated daily digest check and notifications via Vercel Cron Jobs running 24/7."
+    ],
+    "architecture": {
+      "description": "The system employs a local-first architecture where the Chrome Extension acts as the primary offline cache. When enabled, it performs bi-directional synchronization with Supabase via a Vercel serverless API (awt-api). A Vercel Cron Job runs daily to handle background schedule checking and alerts via Telegram bot webhook integrations."
+    },
+    "apiPreview": {
+      "language": "typescript",
+      "code": "// REST API handler snippet saving watch log telemetry\nimport { createClient } from '@supabase/supabase-js';\n\nconst supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!);\n\nexport default async function handler(req: Request, res: Response) {\n  const syncId = req.headers['x-sync-id'];\n  const { data } = req.body;\n  \n  // Perform upsert of watch logs to Supabase database\n  const { error } = await supabase\n    .from('sync_storage')\n    .upsert({ id: syncId, data: data, updated_at: new Date().toISOString() });\n    \n  if (error) return res.status(500).json({ error: error.message });\n  return res.status(200).json({ success: true });\n}"
+    },
+    "gallery": [],
+    "challenges": "Creating a secure, multi-device synchronization protocol without requiring user registration while avoiding double notifications between browser extensions and serverless cron jobs.",
+    "solutions": "Designed a Universal Sync ID generation system that serves as a unique PostgreSQL key. Built an activation flag to toggle off local browser background alarms when Cloud Cron is enabled on the server.",
+    "lessonsLearned": "Mastered multi-platform browser DOM scripting, building secure serverless endpoints with PostgreSQL/Supabase, and scheduling automated tasks with Vercel Cron.",
+    "techStack": ["TypeScript", "Chrome Extension API", "Supabase", "Vercel Cron", "Telegram Bot API"],
+    "githubUrl": "https://github.com/ExtTrace/watch-tracker",
+    "liveUrl": "https://wt-api-smoky.vercel.app"
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "platform": "GitHub",
+    "url": "https://github.com/Febriand1",
+    "label": "Follow on GitHub",
+    "iconName": "github"
+  },
+  {
+    "platform": "LinkedIn",
+    "url": "https://linkedin.com/in/dirgafebrian",
+    "label": "Connect on LinkedIn",
+    "iconName": "linkedin"
+  },
+  {
+    "platform": "Email",
+    "url": "mailto:fdirga63@gmail.com",
+    "label": "Send an Email",
+    "iconName": "email"
+  }
+]

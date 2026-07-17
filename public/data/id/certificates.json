@@ -1,0 +1,50 @@
+[
+  {
+    "id": "certiprof-sfpc",
+    "title": "Scrum Foundation Professional Certification - SFPC",
+    "issuer": "Certiprof",
+    "issueDate": "2024-03",
+    "credentialId": "90a784de-9378-4465-8c8d-2d189d485bc5",
+    "credentialUrl": "https://www.credly.com/badges/90a784de-9378-4465-8c8d-2d189d485bc5/public_url"
+  },
+  {
+    "id": "dicoding-backend-expert-javascript",
+    "title": "Menjadi Back-End Developer Expert dengan JavaScript",
+    "issuer": "Dicoding Indonesia",
+    "issueDate": "2024-10",
+    "credentialId": "MRZMY8V8NZYQ",
+    "credentialUrl": "https://www.dicoding.com/certificates/MRZMY8V8NZYQ"
+  },
+  {
+    "id": "dicoding-fundamental-backend",
+    "title": "Belajar Fundamental Back-End",
+    "issuer": "Dicoding Indonesia",
+    "issueDate": "2024-08",
+    "credentialId": "81P2NJ21YXOY",
+    "credentialUrl": "https://www.dicoding.com/certificates/81P2NJ21YXOY"
+  },
+  {
+    "id": "dicoding-react-web-app",
+    "title": "Belajar Membuat Aplikasi Web dengan React",
+    "issuer": "Dicoding Indonesia",
+    "issueDate": "2024-10",
+    "credentialId": "L4PQ56DGQZO1",
+    "credentialUrl": "https://www.dicoding.com/certificates/L4PQ56DGQZO1"
+  },
+  {
+    "id": "dicoding-architecting-aws",
+    "title": "Architecting on AWS",
+    "issuer": "Dicoding Indonesia",
+    "issueDate": "2024-07",
+    "credentialId": "2VX3RMMEQZYQ",
+    "credentialUrl": "https://www.dicoding.com/certificates/2VX3RMMEQZYQ"
+  },
+  {
+    "id": "dicoding-cloud-practitioner-essentials",
+    "title": "Cloud Practitioner Essentials",
+    "issuer": "Dicoding Indonesia",
+    "issueDate": "2024-06",
+    "credentialId": "ERZR12YDNZYV",
+    "credentialUrl": "https://www.dicoding.com/certificates/ERZR12YDNZYV"
+  }
+]

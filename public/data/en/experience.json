@@ -1,0 +1,72 @@
+[
+  {
+    "id": "hospihub-fullstack",
+    "role": "Fullstack Developer",
+    "company": "PT Hospihub",
+    "companyUrl": "",
+    "location": "Bandung, Indonesia",
+    "type": "Freelance",
+    "startDate": "2025-07",
+    "endDate": "2026-06",
+    "description": "Developed a Hospital Management Information System (SIMRS) from scratch, managing the software development lifecycle (SDLC) and stakeholder requirements.",
+    "achievements": [
+      "Developed the Hospital Management Information System (SIMRS) product from the ground up.",
+      "Designed the core system architecture and complex database schema to ensure high scalability, optimal performance, and secure medical data isolation.",
+      "Developed crucial modules end-to-end using Laravel and React, with an initial focus on Electronic Medical Record (EMR) management and secure user authentication workflows.",
+      "Managed the entire software development life cycle (SDLC) independently, including gathering technical requirements directly from project stakeholders."
+    ],
+    "techStack": ["React", "Laravel", "MySQL", "Database Design", "SDLC"]
+  },
+  {
+    "id": "solusi-pemasaran-digital-fullstack-intern",
+    "role": "Fullstack Developer Intern",
+    "company": "PT Solusi Pemasaran Digital",
+    "companyUrl": "",
+    "location": "Bandung, Indonesia",
+    "type": "Internship",
+    "startDate": "2025-12",
+    "endDate": "2026-06",
+    "description": "Maintained multi-platform interfaces and contributed to omnichannel SaaS backend service integrations.",
+    "achievements": [
+      "\"Melangkah\" App (Web & Mobile): Maintained the frontend system (bug fixing) using Next.js, Vue.js, and Flutter to improve performance stability and user interface responsiveness.",
+      "SaaS & Omnichannel Service: Contributed to the development of a SaaS architecture divided into 3 main components, focusing on the Go and MySQL-based Omnichannel service implementation to handle multi-marketplace API integrations, and managing other parts using React, Django, and PostgreSQL.",
+      "\"Task Master\" App: Trusted in the full development phase to design and implement new features end-to-end using Next.js, Django, and PostgreSQL on both Frontend and Backend."
+    ],
+    "techStack": ["Next.js", "Vue.js", "Flutter", "Go", "MySQL", "React", "Django", "PostgreSQL"]
+  },
+  {
+    "id": "informatika-digital-bisnis-fullstack-intern",
+    "role": "Fullstack Developer Intern",
+    "company": "PT Informatika Digital Bisnis",
+    "companyUrl": "",
+    "location": "Bandung, Indonesia",
+    "type": "Internship",
+    "startDate": "2025-02",
+    "endDate": "2025-09",
+    "description": "Built automated bot workflows, serverless ingestion functions, and structured tracking databases.",
+    "achievements": [
+      "Developed the Domyikado WhatsApp bot and a gamification system based on Strava data scraping to automate user interaction.",
+      "Designed a serverless architecture using Google Cloud Functions and Go to process activity data in real-time and efficiently.",
+      "Managed data storage and analytics on MongoDB NoSQL database to support analytical features and reward systems on the Domyikado website."
+    ],
+    "techStack": ["Go", "MongoDB", "Google Cloud Functions", "Serverless", "Data Scraping", "WhatsApp Bot"]
+  },
+  {
+    "id": "citi-asia-backend-intern",
+    "role": "Backend Developer Intern",
+    "company": "PT Citi Asia Internasional",
+    "companyUrl": "",
+    "location": "Jakarta Timur, Indonesia",
+    "type": "Internship",
+    "startDate": "2024-09",
+    "endDate": "2024-12",
+    "description": "Designed backend micro-features and database optimizations for village-oriented SaaS applications.",
+    "achievements": [
+      "Designed and developed the backend architecture for a village service SaaS (Software as a Service) platform spanning Web and Android applications.",
+      "Implemented secure authentication using Google OAuth via Google Console to simplify the user login process.",
+      "Built internal community and social media features, including custom group chat systems to facilitate communication among subscribed villagers.",
+      "Optimized database management using MySQL to ensure efficient storage of village profiles and social activity histories."
+    ],
+    "techStack": ["MySQL", "Google OAuth", "SaaS Backend", "REST API", "Database Optimization"]
+  }
+]

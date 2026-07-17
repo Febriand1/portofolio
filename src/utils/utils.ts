@@ -1,0 +1,80 @@
+export const fileTypes = [
+  { value: 'projects', label: 'Projects (projects.json)' },
+  { value: 'experience', label: 'Experience (experience.json)' },
+  { value: 'skills', label: 'Skills (skills.json)' },
+  { value: 'education', label: 'Education (education.json)' },
+  { value: 'certificates', label: 'Certificates (certificates.json)' },
+  { value: 'socials', label: 'Socials (socials.json)' },
+];
+
+export const templates: Record<string, any> = {
+  projects: {
+    id: 'new-project-id',
+    title: 'Judul Proyek Baru',
+    subtitle: 'Sub-judul / Deskripsi singkat',
+    overview: 'Penjelasan lengkap tentang proyek ini...',
+    responsibilities: ['Tanggung jawab atau kontribusi ke-1'],
+    features: ['Fitur utama ke-1'],
+    architecture: {
+      description: 'Penjelasan tentang arsitektur sistem...',
+    },
+    apiPreview: {
+      language: 'typescript',
+      code: '// Tulis cuplikan kode di sini',
+    },
+    gallery: [],
+    challenges: 'Tantangan teknis utama yang dihadapi...',
+    solutions: 'Solusi teknis yang diterapkan untuk menyelesaikan tantangan...',
+    lessonsLearned: 'Pelajaran berharga yang didapatkan...',
+    techStack: ['React', 'TypeScript'],
+    githubUrl: '',
+    liveUrl: '',
+  },
+  experience: {
+    id: 'new-experience-id',
+    role: 'Nama Jabatan / Role',
+    company: 'Nama Perusahaan',
+    companyUrl: '',
+    location: 'Lokasi Kerja (contoh: Bandung, Indonesia)',
+    type: 'Full-time',
+    startDate: '2026-01',
+    endDate: '2026-06',
+    description: 'Deskripsi singkat tentang pekerjaan Anda...',
+    achievements: ['Pencapaian utama atau kontribusi ke-1'],
+    techStack: ['React', 'Node.js'],
+  },
+  skills: {
+    id: 'new-skill-category-id',
+    category: 'Nama Kategori Skill Baru',
+    skills: [
+      {
+        name: 'Nama Teknologi',
+        level: 'Intermediate',
+        yearsOfExperience: 2,
+      },
+    ],
+  },
+  education: {
+    id: 'new-education-id',
+    institution: 'Nama Instansi / Universitas',
+    degree: 'Gelar Pendidikan',
+    fieldOfStudy: 'Bidang Studi / Jurusan',
+    startDate: '2022-09',
+    endDate: '2026-06',
+    description: 'Keterangan tambahan (opsional)...',
+  },
+  certificates: {
+    id: 'new-certificate-id',
+    title: 'Nama Sertifikat',
+    issuer: 'Lembaga Penerbit',
+    issueDate: '2026-01',
+    credentialId: 'ID-12345',
+    credentialUrl: 'https://...',
+  },
+  socials: {
+    platform: 'Platform Baru',
+    url: 'https://...',
+    label: 'Teks tautan',
+    iconName: 'opsional',
+  },
+};

@@ -1,0 +1,51 @@
+[
+  {
+    "id": "languages",
+    "category": "Bahasa Pemrograman",
+    "skills": [
+      {
+        "name": "TypeScript/JavaScript",
+        "level": "Expert",
+        "yearsOfExperience": 6
+      },
+      { "name": "Go", "level": "Advanced", "yearsOfExperience": 4 },
+      { "name": "Python", "level": "Intermediate", "yearsOfExperience": 2 },
+      { "name": "PHP", "level": "Intermediate", "yearsOfExperience": 2 },
+      { "name": "Dart", "level": "Intermediate", "yearsOfExperience": 2 },
+      { "name": "HTML5/CSS3", "level": "Expert", "yearsOfExperience": 7 }
+    ]
+  },
+  {
+    "id": "frameworks",
+    "category": "Framework & Pustaka",
+    "skills": [
+      { "name": "React", "level": "Expert", "yearsOfExperience": 5 },
+      {
+        "name": "Node.js (Express/Nest)",
+        "level": "Expert",
+        "yearsOfExperience": 5
+      },
+      { "name": "Tailwind CSS", "level": "Expert", "yearsOfExperience": 4 },
+      { "name": "Laravel", "level": "Expert", "yearsOfExperience": 4 },
+      { "name": "Django", "level": "Advanced", "yearsOfExperience": 3 },
+      { "name": "Vue.js", "level": "Advanced", "yearsOfExperience": 3 },
+      { "name": "Next.js", "level": "Advanced", "yearsOfExperience": 3 },
+      { "name": "Flutter", "level": "Advanced", "yearsOfExperience": 3 }
+    ]
+  },
+  {
+    "id": "infrastructure",
+    "category": "Infrastruktur & Alat",
+    "skills": [
+      { "name": "AWS", "level": "Advanced", "yearsOfExperience": 4 },
+      { "name": "GCP", "level": "Intermediate", "yearsOfExperience": 2 },
+      { "name": "Docker", "level": "Advanced", "yearsOfExperience": 4 },
+      { "name": "Vite", "level": "Advanced", "yearsOfExperience": 4 },
+      {
+        "name": "Git/GitHub Actions",
+        "level": "Expert",
+        "yearsOfExperience": 6
+      }
+    ]
+  }
+]

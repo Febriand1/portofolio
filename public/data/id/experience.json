@@ -1,0 +1,94 @@
+[
+  {
+    "id": "hospihub-fullstack",
+    "role": "Fullstack Developer",
+    "company": "PT Hospihub",
+    "companyUrl": "",
+    "location": "Bandung, Indonesia",
+    "type": "Freelance",
+    "startDate": "2025-07",
+    "endDate": "2026-06",
+    "description": "Mengembangkan Sistem Informasi Manajemen Rumah Sakit (SIMRS) dari awal, mengelola siklus pengembangan perangkat lunak (SDLC) dan persyaratan pemangku kepentingan.",
+    "achievements": [
+      "Mengembangkan produk Sistem Informasi Manajemen Rumah Sakit (SIMRS) dari nol.",
+      "Merancang arsitektur inti sistem dan skema basis data (database schema) yang kompleks untuk memastikan skalabilitas tinggi, performa optimal, serta isolasi data medis yang aman.",
+      "Mengembangkan modul-modul krusial secara end-to-end menggunakan Laravel dan React, dengan fokus awal pada manajemen Rekam Medis Elektronik (RME/EMR) dan alur kerja autentikasi pengguna yang aman.",
+      "Mengelola seluruh siklus hidup pengembangan perangkat lunak (SDLC) secara mandiri, termasuk mengumpulkan kebutuhan teknis (technical requirements) langsung dari para pemangku kepentingan (stakeholders) proyek."
+    ],
+    "techStack": ["React", "Laravel", "MySQL", "Database Design", "SDLC"]
+  },
+  {
+    "id": "solusi-pemasaran-digital-fullstack-intern",
+    "role": "Fullstack Developer Intern",
+    "company": "PT Solusi Pemasaran Digital",
+    "companyUrl": "",
+    "location": "Bandung, Indonesia",
+    "type": "Internship",
+    "startDate": "2025-12",
+    "endDate": "2026-06",
+    "description": "Memelihara antarmuka multi-platform dan berkontribusi pada integrasi layanan backend SaaS omnichannel.",
+    "achievements": [
+      "Aplikasi \"Melangkah\" (Web & Mobile): Melakukan pemeliharaan sistem (bug fixing) pada sisi Frontend menggunakan Next.js, Vue.js, dan Flutter untuk meningkatkan stabilitas performa serta responsivitas antarmuka pengguna.",
+      "SaaS & Service Omnichannel: Terlibat dalam pengembangan arsitektur SaaS yang terpisah menjadi 3 komponen utama, dengan fokus pada implementasi service Omnichannel berbasis Go dan MySQL untuk menangani integrasi API berbagai marketplace, serta mengelola komponen lainnya menggunakan React, Django, dan PostgreSQL.",
+      "Aplikasi \"Task Master\": Dipercaya dalam fase development penuh untuk merancang dan mengimplementasikan modul fitur baru secara end-to-end menggunakan Next.js, Django, dan PostgreSQL pada sisi Frontend dan Backend."
+    ],
+    "techStack": [
+      "Next.js",
+      "Vue.js",
+      "Flutter",
+      "Go",
+      "MySQL",
+      "React",
+      "Django",
+      "PostgreSQL"
+    ]
+  },
+  {
+    "id": "informatika-digital-bisnis-fullstack-intern",
+    "role": "Fullstack Developer Intern",
+    "company": "PT Informatika Digital Bisnis",
+    "companyUrl": "",
+    "location": "Bandung, Indonesia",
+    "type": "Internship",
+    "startDate": "2025-02",
+    "endDate": "2025-09",
+    "description": "Membangun alur kerja bot otomatis, fungsi penyerapan data tanpa server, dan basis data pelacakan terstruktur.",
+    "achievements": [
+      "Mengembangkan bot WhatsApp Domyikado dan sistem gamifikasi berbasis data Strava melalui teknik data scraping aktivitas olahraga untuk otomatisasi interaksi pengguna.",
+      "Merancang arsitektur serverless menggunakan Google Cloud Function dan bahasa Go untuk memproses data aktivitas secara real-time dan efisien.",
+      "Mengelola penyimpanan dan analisis data pada database NoSQL MongoDB untuk mendukung fitur pembelajaran (analytics) serta mekanisme reward di website Domyikado."
+    ],
+    "techStack": [
+      "Go",
+      "MongoDB",
+      "Google Cloud Functions",
+      "Serverless",
+      "Data Scraping",
+      "WhatsApp Bot"
+    ]
+  },
+  {
+    "id": "citi-asia-backend-intern",
+    "role": "Backend Developer Intern",
+    "company": "PT Citi Asia Internasional",
+    "companyUrl": "",
+    "location": "Jakarta Timur, Indonesia",
+    "type": "Internship",
+    "startDate": "2024-09",
+    "endDate": "2024-12",
+    "description": "Merancang fitur mikro backend dan optimasi basis data untuk aplikasi SaaS yang berorientasi pada desa.",
+    "achievements": [
+      "Merancang dan mengembangkan arsitektur backend untuk platform SaaS (Software as a Service) layanan desa yang mencakup aplikasi berbasis Web dan Android.",
+      "Mengimplementasikan sistem autentikasi aman menggunakan Google OAuth via Google Console untuk menyederhanakan proses login pengguna.",
+      "Membangun fitur komunitas dan sosial media internal, termasuk sistem grup chat khusus untuk memfasilitasi komunikasi antarwarga desa yang berlangganan.",
+      "Mengoptimalkan manajemen basis data menggunakan MySQL untuk memastikan penyimpanan data profil desa dan riwayat aktivitas sosial berjalan dengan efisien."
+    ],
+    "techStack": [
+      "MySQL",
+      "Google OAuth",
+      "SaaS Backend",
+      "REST API",
+      "Database Optimization"
+    ]
+  }
+]

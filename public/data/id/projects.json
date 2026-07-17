@@ -1,0 +1,67 @@
+[
+  {
+    "id": "desktop-pos-application",
+    "title": "Desktop Point of Sale (POS) Application",
+    "subtitle": "Aplikasi kasir desktop offline-first berbasis Flutter untuk operasional bisnis ritel lokal.",
+    "overview": "Merancang dan membangun aplikasi kasir (Point of Sale) berbasis desktop dari awal (from scratch) menggunakan Flutter, yang dirancang khusus sebagai solusi operasional offline-first untuk toko retail dan bisnis lokal.",
+    "responsibilities": [
+      "Merancang dan membangun aplikasi kasir (Point of Sale) berbasis desktop dari awal (from scratch) menggunakan Flutter, yang dirancang khusus sebagai solusi operasional offline-first untuk toko retail dan bisnis lokal.",
+      "Menerapkan arsitektur monolith lokal yang mandiri, memastikan aplikasi dapat berjalan 100% tanpa ketergantungan koneksi internet (standalone application) untuk menjamin stabilitas transaksi kasir.",
+      "Mengembangkan fitur-fitur utama secara mandiri, termasuk sistem kasir responsif, manajemen inventori stok real-time, kalkulasi laporan laba-rugi otomatis, serta integrasi pencetakan struk belanja (thermal printer).",
+      "Mengelola penyimpanan data lokal yang efisien menggunakan SQLite untuk memastikan proses pembacaan dan penulisan data transaksi berjalan instan dengan konsumsi memori yang optimal."
+    ],
+    "features": [
+      "Sistem kasir responsif yang dirancang untuk layar desktop retail.",
+      "Manajemen inventori dan pelacakan stok barang secara real-time.",
+      "Kalkulasi laporan laba-rugi otomatis untuk laporan keuangan instan.",
+      "Integrasi pencetakan struk belanja langsung menggunakan thermal printer."
+    ],
+    "architecture": {
+      "description": "Sistem ini menggunakan arsitektur monolith lokal berbasis SQLite yang tertanam langsung di aplikasi. Seluruh pembacaan, penulisan, dan agregasi data transaksi dilakukan secara offline di mesin lokal demi keamanan data medis dan retail yang instan."
+    },
+    "apiPreview": {
+      "language": "dart",
+      "code": "import 'package:sqflite/sqflite.dart';\n\nclass TransactionRepository {\n  final Database _db;\n  TransactionRepository(this._db);\n\n  Future<void> saveTransaction(Transaction tx) async {\n    await _db.transaction((txn) async {\n      // Masukkan baris transaksi utama\n      await txn.insert('transactions', tx.toMap());\n      \n      // Kurangi stok inventori untuk setiap item\n      for (var item in tx.items) {\n        await txn.rawUpdate(\n          'UPDATE products SET stock = stock - ? WHERE id = ?',\n          [item.quantity, item.productId],\n        );\n      }\n    });\n  }\n}"
+    },
+    "gallery": [],
+    "challenges": "Mengelola sinkronisasi inventori dan kalkulasi laba-rugi secara real-time pada penyimpanan SQLite lokal tanpa membebani memori sistem saat volume transaksi kasir sangat tinggi.",
+    "solutions": "Mengoptimalkan query SQL dengan indexing yang tepat dan memanfaatkan thread background (Isolates di Flutter) untuk memproses komputasi laporan keuangan yang berat secara asinkron agar UI tetap responsif.",
+    "lessonsLearned": "Mempelajari pentingnya optimasi database lokal untuk transaksi kasir offline-first serta manajemen memori pada aplikasi desktop berbasis Flutter.",
+    "techStack": ["Flutter", "Dart", "SQLite", "Desktop App", "Offline-first"],
+    "githubUrl": "https://github.com/Febriand1/pos_app",
+    "liveUrl": ""
+  },
+  {
+    "id": "anime-watch-tracker",
+    "title": "Anime Watch Tracker System",
+    "subtitle": "Sistem pelacak riwayat tontonan anime multi-platform otomatis berbasis ekstensi Chrome, database Supabase, dan bot Telegram.",
+    "overview": "Merancang dan membangun platform pemantauan riwayat tontonan anime terintegrasi yang terdiri dari ekstensi Google Chrome (watch-tracker) untuk menangkap aktivitas tontonan secara real-time di Netflix, YouTube, dan domain streaming kustom, serta backend API (awt-api) dan database Supabase untuk memproses serta mensinkronkan data secara otomatis.",
+    "responsibilities": [
+      "Mengembangkan ekstensi Chrome (watch-tracker) menggunakan TypeScript untuk menangkap event player video langsung pada Netflix, YouTube, dan player video HTML5 generic.",
+      "Membangun serverless REST API (awt-api) menggunakan Node.js dan TypeScript di Vercel untuk menerima dan memproses data riwayat tontonan.",
+      "Mengintegrasikan database Supabase (PostgreSQL) untuk sinkronisasi lokal-pertama (local-first) menggunakan Universal Sync ID tanpa membutuhkan registrasi akun pengguna.",
+      "Membuat integrasi Telegram Bot untuk menghubungkan perangkat, menampilkan daftar tontonan aktif (/list), memeriksa episode baru (/new), dan mengecek jadwal rilis dari AniList.",
+      "Mengonfigurasi Vercel Cron Jobs untuk menjalankan pengecekan jadwal tayang otomatis setiap pukul 12:00 siang WIB dan mengirimkan rangkuman notifikasi harian ke Telegram."
+    ],
+    "features": [
+      "Pelacakan video player otomatis (Netflix, YouTube, dan domain streaming kustom).",
+      "Universal Sync ID untuk sinkronisasi multi-perangkat yang aman dan bebas password.",
+      "Integrasi Bot Telegram untuk daftar tontonan (/list), status episode baru (/new), dan jadwal rilis AniList (/schedule).",
+      "Pengecekan digest harian otomatis 24/7 menggunakan Vercel Cron Jobs."
+    ],
+    "architecture": {
+      "description": "Sistem ini menggunakan arsitektur lokal-pertama (local-first) di mana ekstensi Chrome bertindak sebagai cache offline utama. Ketika fitur sinkronisasi diaktifkan, data akan dikirim secara dua arah dengan Supabase melalui serverless API Vercel (awt-api). Vercel Cron Job berjalan harian untuk melakukan pengecekan rilis di background dan mengirim notifikasi via Telegram Bot."
+    },
+    "apiPreview": {
+      "language": "typescript",
+      "code": "// REST API handler snippet saving watch log telemetry\nimport { createClient } from '@supabase/supabase-js';\n\nconst supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!);\n\nexport default async function handler(req: Request, res: Response) {\n  const syncId = req.headers['x-sync-id'];\n  const { data } = req.body;\n  \n  // Perform upsert of watch logs to Supabase database\n  const { error } = await supabase\n    .from('sync_storage')\n    .upsert({ id: syncId, data: data, updated_at: new Date().toISOString() });\n    \n  if (error) return res.status(500).json({ error: error.message });\n  return res.status(200).json({ success: true });\n}"
+    },
+    "gallery": [],
+    "challenges": "Membangun protokol sinkronisasi multi-perangkat yang aman tanpa registrasi akun tradisional, sekaligus menghindari pemicuan notifikasi ganda antara alarm background lokal browser dengan sistem cron di server awan.",
+    "solutions": "Mendesain sistem generate Universal Sync ID unik sebagai primary key di PostgreSQL. Menambahkan flag aktivasi pada ekstensi untuk mematikan alarm lokal ketika Cloud Cron diaktifkan di sisi server.",
+    "lessonsLearned": "Menguasai teknik scripting DOM lintas platform, pembuatan arsitektur serverless yang terintegrasi dengan PostgreSQL/Supabase, serta otomatisasi penjadwalan tugas berkala menggunakan Vercel Cron.",
+    "techStack": ["TypeScript", "Chrome Extension API", "Supabase", "Vercel Cron", "Telegram Bot API"],
+    "githubUrl": "https://github.com/ExtTrace/watch-tracker",
+    "liveUrl": "https://wt-api-smoky.vercel.app"
+  }
+]
