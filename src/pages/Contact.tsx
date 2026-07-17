@@ -59,7 +59,7 @@ const Contact: React.FC = () => {
           {socials.map((social) => (
             <div
               key={social.platform}
-              className="border border-border-light rounded-lg p-6 bg-white hover:border-brand/40 transition-colors flex flex-col justify-between"
+              className="border border-border-light rounded-lg p-6 bg-card-custom hover:border-brand/40 transition-colors flex flex-col justify-between"
             >
               <div>
                 <h3 className="text-lg font-bold font-heading text-neutral-dark mb-2">
@@ -74,7 +74,7 @@ const Contact: React.FC = () => {
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block text-center px-4 py-2 bg-neutral-light border border-border-light hover:bg-neutral-200/50 hover:text-brand text-neutral-700 text-xs font-semibold rounded transition-colors focus:outline-none focus:ring-2 focus:ring-brand"
+                className="inline-block text-center px-4 py-2 bg-neutral-light border border-border-light hover:bg-neutral-200/50 hover:text-brand text-neutral-600 dark:text-neutral-300 hover:dark:text-brand text-xs font-semibold rounded transition-colors focus:outline-none focus:ring-2 focus:ring-brand"
               >
                 {t('contact.connect')} &rarr;
               </a>

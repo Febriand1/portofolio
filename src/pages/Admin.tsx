@@ -295,7 +295,7 @@ const Admin: React.FC = () => {
   if (!isAuthenticated) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center px-6">
-        <div className="max-w-md w-full bg-white border border-border-light rounded-xl p-8 shadow-sm">
+        <div className="max-w-md w-full bg-card-custom border border-border-light rounded-xl p-8 shadow-sm">
           <div className="text-center mb-6">
             <h1 className="text-2xl font-bold font-heading text-neutral-dark mb-2">
               Panel Keamanan Admin
@@ -349,7 +349,7 @@ const Admin: React.FC = () => {
                 <p className="text-neutral-500 leading-relaxed">
                   Buka Google Authenticator, tambahkan akun baru secara manual (**setup key**), masukkan kunci rahasia ini:
                 </p>
-                <div className="font-mono bg-white border border-border-light px-2 py-1.5 rounded text-center font-bold text-neutral-700 select-all">
+                <div className="font-mono bg-card-custom border border-border-light px-2 py-1.5 rounded text-center font-bold text-neutral-700 select-all">
                   {totpSecret}
                 </div>
               </div>
@@ -387,7 +387,7 @@ const Admin: React.FC = () => {
       {/* Configuration & selector cards */}
       <div className="space-y-6">
         {/* GitHub settings */}
-        <div className="border border-border-light rounded-lg p-5 bg-white space-y-4">
+        <div className="border border-border-light rounded-lg p-5 bg-card-custom space-y-4">
           <h3 className="font-bold text-neutral-dark font-heading text-base border-b border-border-light pb-2">
             Konfigurasi Repositori
           </h3>
@@ -438,7 +438,7 @@ const Admin: React.FC = () => {
         {/* CMS main manager */}
         <div className="space-y-6">
           {/* Controls Bar */}
-          <div className="border border-border-light rounded-lg p-5 bg-white space-y-4">
+          <div className="border border-border-light rounded-lg p-5 bg-card-custom space-y-4">
             <h3 className="font-bold text-neutral-dark font-heading text-base border-b border-border-light pb-2">
               Pengaturan Konten
             </h3>
@@ -451,7 +451,7 @@ const Admin: React.FC = () => {
                     className={`flex-1 py-1.5 text-xs font-semibold rounded border transition-colors ${
                       selectedLang === 'id'
                         ? 'bg-brand text-white border-brand'
-                        : 'bg-white text-neutral-600 border-border-light hover:bg-neutral-light'
+                        : 'bg-card-custom text-neutral-600 border-border-light hover:bg-neutral-light'
                     }`}
                   >
                     Bahasa Indonesia (ID)
@@ -461,7 +461,7 @@ const Admin: React.FC = () => {
                     className={`flex-1 py-1.5 text-xs font-semibold rounded border transition-colors ${
                       selectedLang === 'en'
                         ? 'bg-brand text-white border-brand'
-                        : 'bg-white text-neutral-600 border-border-light hover:bg-neutral-light'
+                        : 'bg-card-custom text-neutral-600 border-border-light hover:bg-neutral-light'
                     }`}
                   >
                     Bahasa Inggris (EN)
@@ -474,7 +474,7 @@ const Admin: React.FC = () => {
                 <select
                   value={selectedFile}
                   onChange={(e) => setSelectedFile(e.target.value)}
-                  className="w-full px-3 py-1.5 border border-border-light bg-white rounded focus:outline-none focus:ring-2 focus:ring-brand text-xs"
+                  className="w-full px-3 py-1.5 border border-border-light bg-card-custom rounded focus:outline-none focus:ring-2 focus:ring-brand text-xs"
                 >
                   {fileTypes.map((t) => (
                     <option key={t.value} value={t.value}>
@@ -489,7 +489,7 @@ const Admin: React.FC = () => {
           {/* Form Editor or List Mode */}
           {editForm ? (
             /* ==================== FORM MODE ==================== */
-            <div className="border border-border-light rounded-lg p-6 bg-white space-y-6">
+            <div className="border border-border-light rounded-lg p-6 bg-card-custom space-y-6">
               <div className="flex justify-between items-baseline border-b border-border-light pb-3">
                 <h3 className="font-bold text-neutral-dark font-heading text-lg">
                   {isAddingNew ? 'Tambah Item Baru' : 'Edit Item'}
@@ -945,7 +945,7 @@ const Admin: React.FC = () => {
                                 updated.skills[i].name = e.target.value;
                                 setEditForm(updated);
                               }}
-                              className="w-full px-2 py-1 border border-border-light bg-white rounded text-xs"
+                              className="w-full px-2 py-1 border border-border-light bg-card-custom rounded text-xs"
                             />
                           </div>
                           <div className="w-32">
@@ -958,7 +958,7 @@ const Admin: React.FC = () => {
                                 updated.skills[i].level = e.target.value;
                                 setEditForm(updated);
                               }}
-                              className="w-full px-2 py-1 border border-border-light bg-white rounded text-xs"
+                              className="w-full px-2 py-1 border border-border-light bg-card-custom rounded text-xs"
                               placeholder="Expert / Advanced"
                             />
                           </div>
@@ -972,7 +972,7 @@ const Admin: React.FC = () => {
                                 updated.skills[i].yearsOfExperience = parseInt(e.target.value) || 0;
                                 setEditForm(updated);
                               }}
-                              className="w-full px-2 py-1 border border-border-light bg-white rounded text-xs"
+                              className="w-full px-2 py-1 border border-border-light bg-card-custom rounded text-xs"
                             />
                           </div>
                         </div>
@@ -1176,7 +1176,7 @@ const Admin: React.FC = () => {
             </div>
           ) : (
             /* ==================== LIST MODE ==================== */
-            <div className="border border-border-light rounded-lg p-6 bg-white space-y-4">
+            <div className="border border-border-light rounded-lg p-6 bg-card-custom space-y-4">
               <div className="flex justify-between items-center border-b border-border-light pb-3">
                 <h3 className="font-bold text-neutral-dark font-heading text-lg">
                   Daftar Data ({dataList.length} item)
@@ -1212,13 +1212,13 @@ const Admin: React.FC = () => {
                       <div className="flex gap-2">
                         <button
                           onClick={() => startEdit(i)}
-                          className="px-2.5 py-1.5 text-xs font-semibold bg-white border border-border-light text-neutral-600 hover:text-brand hover:bg-neutral-light rounded"
+                          className="px-2.5 py-1.5 text-xs font-semibold bg-card-custom border border-border-light text-neutral-600 hover:text-brand hover:bg-neutral-light rounded"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => handleDeleteItem(i)}
-                          className="px-2.5 py-1.5 text-xs font-semibold bg-white border border-border-light text-red-500 hover:bg-red-50 rounded"
+                          className="px-2.5 py-1.5 text-xs font-semibold bg-card-custom border border-border-light text-red-500 hover:bg-red-50 rounded"
                         >
                           Hapus
                         </button>

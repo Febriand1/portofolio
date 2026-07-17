@@ -6,7 +6,7 @@ import Container from './Container';
 
 const Layout: React.FC = () => {
   return (
-    <div className="min-h-screen bg-white text-neutral-dark flex flex-col">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       
       <main className="flex-grow flex flex-col justify-start">

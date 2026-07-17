@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://portofolio-nine-teal-18.vercel.app/sitemap.xml
+Sitemap: https://febriand.vercel.app/sitemap.xml

@@ -12,7 +12,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const { t } = useLanguage();
 
   return (
-    <article className="border border-border-light rounded-lg p-6 bg-white hover:border-brand/40 hover:shadow-sm transition-all duration-200 flex flex-col justify-between">
+    <article className="border border-border-light rounded-lg p-6 bg-card-custom hover:border-brand/40 hover:shadow-sm transition-all duration-200 flex flex-col justify-between">
       <div>
         <h3 className="text-xl font-bold font-heading text-neutral-dark mb-2">
           {project.title}

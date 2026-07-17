@@ -75,7 +75,7 @@ const Projects: React.FC = () => {
               className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
                 selectedTech === null
                   ? 'bg-brand text-white'
-                  : 'bg-neutral-light text-neutral-600 hover:bg-neutral-200/60'
+                  : 'bg-neutral-light text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200/60 dark:hover:bg-neutral-800'
               }`}
             >
               {t('projects.filter.all')}
@@ -87,7 +87,7 @@ const Projects: React.FC = () => {
                 className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
                   selectedTech === tech
                     ? 'bg-brand text-white'
-                    : 'bg-neutral-light text-neutral-600 hover:bg-neutral-200/60'
+                    : 'bg-neutral-light text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200/60 dark:hover:bg-neutral-800'
                 }`}
               >
                 {tech}

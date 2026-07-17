@@ -63,10 +63,10 @@ const About: React.FC = () => {
         <h2 className="text-xl font-bold font-heading text-neutral-dark border-b border-border-light pb-2">
           {t('about.bio.title')}
         </h2>
-        <p className="text-neutral-600 font-sans leading-relaxed">
+        <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed">
           {t('about.bio.p1')}
         </p>
-        <p className="text-neutral-600 font-sans leading-relaxed">
+        <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed">
           {t('about.bio.p2')}
         </p>
       </Section>

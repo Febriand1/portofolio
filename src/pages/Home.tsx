@@ -123,7 +123,7 @@ const Home: React.FC = () => {
                 {category.skills.map((skill) => (
                   <span
                     key={skill.name}
-                    className="px-2.5 py-1 text-xs font-sans font-medium text-neutral-700 bg-white border border-border-light rounded"
+                    className="px-2.5 py-1 text-xs font-sans font-medium text-neutral-600 dark:text-neutral-300 bg-card-custom border border-border-light rounded"
                   >
                     {skill.name}
                   </span>

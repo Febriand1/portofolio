@@ -8,19 +8,42 @@
   
   --color-brand: #2563eb;
   --color-brand-hover: #1d4ed8;
-  --color-neutral-dark: #171717;
-  --color-neutral-light: #f9fafb;
-  --color-border-light: #e5e7eb;
+  --color-neutral-dark: var(--text-dark);
+  --color-neutral-light: var(--bg-surface);
+  --color-border-light: var(--border-color);
+}
+
+:root {
+  --bg-app: #ffffff;
+  --bg-card: #ffffff;
+  --text-dark: #171717;
+  --bg-surface: #f9fafb;
+  --border-color: #e5e7eb;
+}
+
+:root.dark {
+  --bg-app: #0b0f19;
+  --bg-card: #111c30;
+  --text-dark: #f3f4f6;
+  --bg-surface: #162238;
+  --border-color: #243552;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: #ffffff;
+  background-color: var(--bg-app);
   color: var(--color-neutral-dark);
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   margin: 0;
   padding: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
+}
+
+/* Specific elements background override */
+.bg-card-custom {
+  background-color: var(--bg-card);
+  transition: background-color 0.2s ease;
 }

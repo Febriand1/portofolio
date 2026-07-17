@@ -78,12 +78,12 @@ const Experience: React.FC = () => {
               }
             >
               <div className="space-y-4 mt-2">
-                <p className="text-neutral-600 font-sans leading-relaxed text-sm">
+                <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed text-sm">
                   {job.description}
                 </p>
                 
                 {job.achievements.length > 0 && (
-                  <ul className="list-disc pl-5 space-y-1.5 text-neutral-600 text-sm font-sans">
+                  <ul className="list-disc pl-5 space-y-1.5 text-neutral-600 dark:text-neutral-300 text-sm font-sans">
                     {job.achievements.map((ach, idx) => (
                       <li key={idx} className="leading-relaxed">{ach}</li>
                     ))}

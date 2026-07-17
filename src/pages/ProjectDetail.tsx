@@ -88,7 +88,7 @@ const ProjectDetail: React.FC = () => {
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 border border-border-light hover:bg-neutral-light text-neutral-700 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-400"
+                className="px-4 py-2 border border-border-light hover:bg-neutral-light text-neutral-600 dark:text-neutral-300 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-400"
               >
                 {t('project.detail.repo')}
               </a>
@@ -112,7 +112,7 @@ const ProjectDetail: React.FC = () => {
         <h2 className="text-xl font-bold font-heading text-neutral-dark border-b border-border-light pb-2">
           {t('project.detail.overview')}
         </h2>
-        <p className="text-neutral-600 font-sans leading-relaxed">
+        <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed">
           {project.overview}
         </p>
       </Section>
@@ -122,7 +122,7 @@ const ProjectDetail: React.FC = () => {
         <h2 className="text-xl font-bold font-heading text-neutral-dark border-b border-border-light pb-2">
           {t('project.detail.resp')}
         </h2>
-        <ul className="list-disc pl-5 space-y-2 text-neutral-600 font-sans">
+        <ul className="list-disc pl-5 space-y-2 text-neutral-600 dark:text-neutral-300 font-sans">
           {project.responsibilities.map((resp, i) => (
             <li key={i} className="leading-relaxed">{resp}</li>
           ))}
@@ -134,7 +134,7 @@ const ProjectDetail: React.FC = () => {
         <h2 className="text-xl font-bold font-heading text-neutral-dark border-b border-border-light pb-2">
           {t('project.detail.features')}
         </h2>
-        <ul className="list-disc pl-5 space-y-2 text-neutral-600 font-sans">
+        <ul className="list-disc pl-5 space-y-2 text-neutral-600 dark:text-neutral-300 font-sans">
           {project.features.map((feat, i) => (
             <li key={i} className="leading-relaxed">{feat}</li>
           ))}
@@ -146,7 +146,7 @@ const ProjectDetail: React.FC = () => {
         <h2 className="text-xl font-bold font-heading text-neutral-dark border-b border-border-light pb-2">
           {t('project.detail.architecture')}
         </h2>
-        <p className="text-neutral-600 font-sans leading-relaxed">
+        <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed">
           {project.architecture.description}
         </p>
       </Section>
@@ -170,19 +170,19 @@ const ProjectDetail: React.FC = () => {
           <h2 className="text-xl font-bold font-heading text-neutral-dark border-b border-border-light pb-2 mb-4">
             {t('project.detail.challenges.title')}
           </h2>
-          <h3 className="text-md font-bold text-neutral-700 mb-2">
+          <h3 className="text-md font-bold text-neutral-700 dark:text-neutral-200 mb-2">
             {t('project.detail.challenges.sub')}
           </h3>
-          <p className="text-neutral-600 font-sans leading-relaxed mb-4">
+          <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed mb-4">
             {project.challenges}
           </p>
         </div>
 
         <div>
-          <h3 className="text-md font-bold text-neutral-700 mb-2">
+          <h3 className="text-md font-bold text-neutral-700 dark:text-neutral-200 mb-2">
             {t('project.detail.solutions.sub')}
           </h3>
-          <p className="text-neutral-600 font-sans leading-relaxed mb-4">
+          <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed mb-4">
             {project.solutions}
           </p>
         </div>
@@ -191,7 +191,7 @@ const ProjectDetail: React.FC = () => {
           <h3 className="text-sm font-bold text-brand uppercase tracking-wider mb-2">
             {t('project.detail.lessons.sub')}
           </h3>
-          <p className="text-sm text-neutral-600 font-sans leading-relaxed">
+          <p className="text-sm text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed">
             {project.lessonsLearned}
           </p>
         </div>
