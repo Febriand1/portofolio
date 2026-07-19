@@ -20,10 +20,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         <p className="text-sm font-medium text-brand mb-3">
           {project.subtitle}
         </p>
-        <p className="text-sm text-neutral-500 mb-4 line-clamp-3">
+        <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-4 line-clamp-3">
           {project.overview}
         </p>
-        
+
         <div className="flex flex-wrap gap-2 mb-6">
           {project.techStack.map((tech) => (
             <Badge key={tech} label={tech} />
@@ -38,13 +38,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         >
           {t('projects.card.view')} &rarr;
         </Link>
-        
+
         {project.githubUrl && (
           <a
             href={project.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-neutral-400 hover:text-neutral-700 transition-colors"
+            className="text-xs text-neutral-600 dark:text-neutral-300 transition-colors hover:text-brand hover:underline focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 rounded"
           >
             GitHub
           </a>

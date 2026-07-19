@@ -17,7 +17,7 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({
     <div className="relative pl-8 pb-12 last:pb-0 group">
       {/* Connector line */}
       <div className="absolute left-3 top-2 bottom-0 w-0.5 bg-border-light group-last:hidden" />
-      
+
       {/* Node indicator */}
       <div className="absolute left-1.5 top-1.5 w-3.5 h-3.5 rounded-full border-2 border-brand bg-white group-hover:bg-brand transition-colors duration-200" />
 
@@ -26,7 +26,7 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({
           <h3 className="text-lg font-bold font-heading text-neutral-dark leading-snug">
             {title}
           </h3>
-          <div className="text-sm font-medium text-neutral-500 mt-0.5">
+          <div className="text-sm font-medium text-neutral-600 dark:text-neutral-300 mt-0.5">
             {subtitle}
           </div>
         </div>
@@ -35,7 +35,9 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({
         </div>
       </div>
 
-      {children && <div className="text-sm text-neutral-600 font-sans">{children}</div>}
+      {children && (
+        <div className="text-sm text-neutral-600 font-sans">{children}</div>
+      )}
     </div>
   );
 };

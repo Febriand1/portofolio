@@ -6,7 +6,7 @@ interface BadgeProps {
 
 const Badge: React.FC<BadgeProps> = ({ label }) => {
   return (
-    <span className="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-neutral-light text-neutral-600 border border-border-light">
+    <span className="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-neutral-light text-neutral-600 dark:text-neutral-300 border border-border-light">
       {label}
     </span>
   );

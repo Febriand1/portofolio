@@ -5,6 +5,7 @@ import Timeline, { TimelineItem } from '../components/Timeline';
 import Badge from '../components/Badge';
 import Section from '../components/Section';
 import { useLanguage } from '../hooks/useLanguage';
+import Loading from '../components/loading';
 
 const Experience: React.FC = () => {
   const { language, t } = useLanguage();
@@ -20,7 +21,10 @@ const Experience: React.FC = () => {
         setExperience(data);
       } catch (err) {
         console.error('Failed to load experience:', err);
-        setError(t('loading.experience.error') || 'Unable to load career accomplishments.');
+        setError(
+          t('loading.experience.error') ||
+            'Unable to load career accomplishments.',
+        );
       } finally {
         setLoading(false);
       }
@@ -28,21 +32,11 @@ const Experience: React.FC = () => {
     loadExperience();
   }, [language]);
 
-  if (loading) {
-    return (
-      <div className="py-24 text-center">
-        <p className="text-neutral-500 font-sans">{t('loading.experience')}</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="py-24 text-center text-red-500">
-        <p className="font-sans">{error}</p>
-      </div>
-    );
-  }
+  <Loading
+    loading={loading}
+    loadingText={t('loading.experience')}
+    error={error}
+  />;
 
   return (
     <div className="space-y-6">
@@ -50,7 +44,7 @@ const Experience: React.FC = () => {
         <h1 className="text-3xl font-extrabold font-heading text-neutral-dark mb-4">
           {t('experience.title')}
         </h1>
-        <p className="text-lg text-neutral-500 font-sans max-w-2xl">
+        <p className="text-lg text-neutral-600 dark:text-neutral-300 font-sans max-w-2xl">
           {t('experience.desc')}
         </p>
       </Section>
@@ -81,15 +75,17 @@ const Experience: React.FC = () => {
                 <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed text-sm">
                   {job.description}
                 </p>
-                
+
                 {job.achievements.length > 0 && (
                   <ul className="list-disc pl-5 space-y-1.5 text-neutral-600 dark:text-neutral-300 text-sm font-sans">
                     {job.achievements.map((ach, idx) => (
-                      <li key={idx} className="leading-relaxed">{ach}</li>
+                      <li key={idx} className="leading-relaxed">
+                        {ach}
+                      </li>
                     ))}
                   </ul>
                 )}
-                
+
                 <div className="flex flex-wrap gap-1.5 pt-2">
                   {job.techStack.map((tech) => (
                     <Badge key={tech} label={tech} />

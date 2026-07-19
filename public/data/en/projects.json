@@ -28,7 +28,7 @@
     "solutions": "Optimized SQL queries using proper database indexing and utilized Dart background threads (Isolates) to perform heavy financial report calculations asynchronously.",
     "lessonsLearned": "Learned the critical value of database optimization for offline-first local checkout transactions and memory management in Flutter-based desktop software.",
     "techStack": ["Flutter", "Dart", "SQLite", "Desktop App", "Offline-first"],
-    "githubUrl": "https://github.com/example/desktop-pos",
+    "githubUrl": "https://github.com/Febriand1/pos_app",
     "liveUrl": ""
   },
   {
@@ -62,7 +62,7 @@
     "lessonsLearned": "Mastered multi-platform browser DOM scripting, building secure serverless endpoints with PostgreSQL/Supabase, and scheduling automated tasks with Vercel Cron.",
     "techStack": ["TypeScript", "Chrome Extension API", "Supabase", "Vercel Cron", "Telegram Bot API"],
     "githubUrl": "https://github.com/ExtTrace/watch-tracker",
-    "liveUrl": "https://wt-api-smoky.vercel.app"
+    "liveUrl": ""
   },
   {
     "id": "android-touch-blocker",

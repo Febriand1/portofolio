@@ -62,7 +62,7 @@
     "lessonsLearned": "Menguasai teknik scripting DOM lintas platform, pembuatan arsitektur serverless yang terintegrasi dengan PostgreSQL/Supabase, serta otomatisasi penjadwalan tugas berkala menggunakan Vercel Cron.",
     "techStack": ["TypeScript", "Chrome Extension API", "Supabase", "Vercel Cron", "Telegram Bot API"],
     "githubUrl": "https://github.com/ExtTrace/watch-tracker",
-    "liveUrl": "https://wt-api-smoky.vercel.app"
+    "liveUrl": ""
   },
   {
     "id": "android-touch-blocker",

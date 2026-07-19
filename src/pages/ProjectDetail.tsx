@@ -6,6 +6,7 @@ import CodeBlock from '../components/CodeBlock';
 import Badge from '../components/Badge';
 import Section from '../components/Section';
 import { useLanguage } from '../hooks/useLanguage';
+import Loading from '../components/loading';
 
 const ProjectDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -23,7 +24,9 @@ const ProjectDetail: React.FC = () => {
         setProject(data);
       } catch (err) {
         console.error('Failed to load project details:', err);
-        setError(t('loading.detail.error') || 'Unable to load project details.');
+        setError(
+          t('loading.detail.error') || 'Unable to load project details.',
+        );
       } finally {
         setLoading(false);
       }
@@ -31,24 +34,18 @@ const ProjectDetail: React.FC = () => {
     loadProject();
   }, [id, language]);
 
-  if (loading) {
-    return (
-      <div className="py-24 text-center">
-        <p className="text-neutral-500 font-sans">{t('loading.detail')}</p>
-      </div>
-    );
-  }
-
-  if (error || !project) {
-    return (
-      <div className="py-24 text-center text-red-500 space-y-4">
-        <p className="font-sans">{error || 'Project specifications not found.'}</p>
-        <Link to="/projects" className="text-brand hover:underline font-semibold text-sm">
-          &larr; {t('project.detail.back')}
-        </Link>
-      </div>
-    );
-  }
+  <Loading
+    loading={loading}
+    loadingText={t('loading.detail')}
+    error={error || (!project ? 'Project specifications not found.' : null)}
+  >
+    <Link
+      to="/projects"
+      className="text-brand hover:underline font-semibold text-sm"
+    >
+      &larr; {t('project.detail.back')}
+    </Link>
+  </Loading>;
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -68,24 +65,24 @@ const ProjectDetail: React.FC = () => {
           {t('project.detail.casestudy')}
         </p>
         <h1 className="text-3xl md:text-4xl font-extrabold font-heading text-neutral-dark mb-4">
-          {project.title}
+          {project?.title}
         </h1>
-        <p className="text-lg text-neutral-500 font-sans leading-relaxed mb-6">
-          {project.subtitle}
+        <p className="text-lg text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed mb-6">
+          {project?.subtitle}
         </p>
 
         {/* Action Links */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-border-light/60">
           <div className="flex flex-wrap gap-2">
-            {project.techStack.map((tech) => (
+            {project?.techStack.map((tech) => (
               <Badge key={tech} label={tech} />
             ))}
           </div>
-          
+
           <div className="flex gap-4">
-            {project.githubUrl && (
+            {project?.githubUrl && (
               <a
-                href={project.githubUrl}
+                href={project?.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-4 py-2 border border-border-light hover:bg-neutral-light text-neutral-600 dark:text-neutral-300 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-400"
@@ -93,9 +90,9 @@ const ProjectDetail: React.FC = () => {
                 {t('project.detail.repo')}
               </a>
             )}
-            {project.liveUrl && (
+            {project?.liveUrl && (
               <a
-                href={project.liveUrl}
+                href={project?.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-4 py-2 bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded-md shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
@@ -113,7 +110,7 @@ const ProjectDetail: React.FC = () => {
           {t('project.detail.overview')}
         </h2>
         <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed">
-          {project.overview}
+          {project?.overview}
         </p>
       </Section>
 
@@ -123,8 +120,10 @@ const ProjectDetail: React.FC = () => {
           {t('project.detail.resp')}
         </h2>
         <ul className="list-disc pl-5 space-y-2 text-neutral-600 dark:text-neutral-300 font-sans">
-          {project.responsibilities.map((resp, i) => (
-            <li key={i} className="leading-relaxed">{resp}</li>
+          {project?.responsibilities.map((resp, i) => (
+            <li key={i} className="leading-relaxed">
+              {resp}
+            </li>
           ))}
         </ul>
       </Section>
@@ -135,8 +134,10 @@ const ProjectDetail: React.FC = () => {
           {t('project.detail.features')}
         </h2>
         <ul className="list-disc pl-5 space-y-2 text-neutral-600 dark:text-neutral-300 font-sans">
-          {project.features.map((feat, i) => (
-            <li key={i} className="leading-relaxed">{feat}</li>
+          {project?.features.map((feat, i) => (
+            <li key={i} className="leading-relaxed">
+              {feat}
+            </li>
           ))}
         </ul>
       </Section>
@@ -147,20 +148,23 @@ const ProjectDetail: React.FC = () => {
           {t('project.detail.architecture')}
         </h2>
         <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed">
-          {project.architecture.description}
+          {project?.architecture.description}
         </p>
       </Section>
 
       {/* API Preview */}
-      {project.apiPreview && (
+      {project?.apiPreview && (
         <Section id="api-preview" className="space-y-4">
           <h2 className="text-xl font-bold font-heading text-neutral-dark border-b border-border-light pb-2">
             {t('project.detail.api')}
           </h2>
-          <p className="text-sm text-neutral-500 font-sans">
+          <p className="text-sm text-neutral-600 dark:text-neutral-300 font-sans">
             {t('project.detail.api.desc')}
           </p>
-          <CodeBlock code={project.apiPreview.code} language={project.apiPreview.language} />
+          <CodeBlock
+            code={project.apiPreview.code}
+            language={project.apiPreview.language}
+          />
         </Section>
       )}
 
@@ -174,7 +178,7 @@ const ProjectDetail: React.FC = () => {
             {t('project.detail.challenges.sub')}
           </h3>
           <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed mb-4">
-            {project.challenges}
+            {project?.challenges}
           </p>
         </div>
 
@@ -183,7 +187,7 @@ const ProjectDetail: React.FC = () => {
             {t('project.detail.solutions.sub')}
           </h3>
           <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed mb-4">
-            {project.solutions}
+            {project?.solutions}
           </p>
         </div>
 
@@ -192,7 +196,7 @@ const ProjectDetail: React.FC = () => {
             {t('project.detail.lessons.sub')}
           </h3>
           <p className="text-sm text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed">
-            {project.lessonsLearned}
+            {project?.lessonsLearned}
           </p>
         </div>
       </Section>

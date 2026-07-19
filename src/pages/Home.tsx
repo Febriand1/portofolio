@@ -5,6 +5,7 @@ import type { Project, SkillCategory } from '../types/portfolio';
 import ProjectCard from '../components/ProjectCard';
 import Section from '../components/Section';
 import { useLanguage } from '../hooks/useLanguage';
+import Loading from '../components/loading';
 
 const Home: React.FC = () => {
   const { language, t } = useLanguage();
@@ -25,7 +26,9 @@ const Home: React.FC = () => {
         setSkills(loadedSkills);
       } catch (err) {
         console.error('Failed to load home page data:', err);
-        setError(t('loading.profile.error') || 'Unable to load portfolio details.');
+        setError(
+          t('loading.profile.error') || 'Unable to load portfolio details.',
+        );
       } finally {
         setLoading(false);
       }
@@ -33,21 +36,11 @@ const Home: React.FC = () => {
     loadData();
   }, [language]);
 
-  if (loading) {
-    return (
-      <div className="py-24 text-center">
-        <p className="text-neutral-500 font-sans">{t('loading.profile')}</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="py-24 text-center text-red-500">
-        <p className="font-sans">{error}</p>
-      </div>
-    );
-  }
+  <Loading
+    loading={loading}
+    loadingText={t('loading.profile')}
+    error={error}
+  />;
 
   return (
     <div className="space-y-6">
@@ -60,10 +53,10 @@ const Home: React.FC = () => {
           <h1 className="text-4xl md:text-6xl font-extrabold font-heading text-neutral-dark leading-tight tracking-tight mb-6">
             {t('hero.title')}
           </h1>
-          <p className="text-lg md:text-xl text-neutral-500 font-sans leading-relaxed mb-10 max-w-2xl">
+          <p className="text-lg md:text-xl text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed mb-10 max-w-2xl">
             {t('hero.desc')}
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
               to="/projects"
@@ -73,7 +66,7 @@ const Home: React.FC = () => {
             </Link>
             <Link
               to="/contact"
-              className="px-6 py-3 border border-border-light hover:bg-neutral-light text-neutral-700 text-sm font-semibold rounded-md transition-colors text-center focus:outline-none focus:ring-2 focus:ring-neutral-400"
+              className="px-6 py-3 border border-border-light hover:bg-neutral-light text-neutral-600 dark:text-neutral-300 text-sm font-semibold rounded-md transition-colors text-center focus:outline-none focus:ring-2 focus:ring-neutral-400"
             >
               {t('hero.cta.contact')} &rarr;
             </Link>
@@ -88,9 +81,6 @@ const Home: React.FC = () => {
             <h2 className="text-2xl font-bold font-heading text-neutral-dark">
               {t('projects.featured.title')}
             </h2>
-            {/* <p className="text-sm text-neutral-500 mt-1">
-              {t('projects.featured.desc')}
-            </p> */}
           </div>
           <Link
             to="/projects"
@@ -99,7 +89,7 @@ const Home: React.FC = () => {
             {t('projects.featured.all')} &rarr;
           </Link>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} />
@@ -112,10 +102,13 @@ const Home: React.FC = () => {
         <h2 className="text-2xl font-bold font-heading text-neutral-dark mb-8">
           {t('skills.core.title')}
         </h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {skills.map((category) => (
-            <div key={category.id} className="border border-border-light/60 rounded-lg p-6 bg-neutral-light/50">
+            <div
+              key={category.id}
+              className="border border-border-light/60 rounded-lg p-6 bg-neutral-light/50"
+            >
               <h3 className="font-bold text-neutral-dark font-heading mb-4 border-b border-border-light pb-2">
                 {category.category}
               </h3>
