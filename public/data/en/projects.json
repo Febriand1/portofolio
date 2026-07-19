@@ -63,5 +63,40 @@
     "techStack": ["TypeScript", "Chrome Extension API", "Supabase", "Vercel Cron", "Telegram Bot API"],
     "githubUrl": "https://github.com/ExtTrace/watch-tracker",
     "liveUrl": "https://wt-api-smoky.vercel.app"
+  },
+  {
+    "id": "android-touch-blocker",
+    "title": "Android Touch Blocker & Guided Access Utility",
+    "subtitle": "An event-driven hybrid Android background lock engine with floating assistive bubble UI built using Flutter and Kotlin Native.",
+    "overview": "Designed and built an Android Touch Blocker application that monitors foreground application state changes dynamically and draws a floating assistive touch lock overlay to block screen inputs during media consumption (e.g., watching videos), protecting against accidental screen touches.",
+    "responsibilities": [
+      "Developed a hybrid mobile architecture keeping a clear separation of concerns between Flutter (Control Panel UI) and Kotlin Native (Background Engine).",
+      "Implemented Android AccessibilityService to detect foreground application changes using event-driven TYPE_WINDOW_STATE_CHANGED and TYPE_WINDOW_CONTENT_CHANGED hooks with zero CPU polling.",
+      "Built a custom programmatic WindowManager floating overlay system in Kotlin Native managing lightweight WRAP_CONTENT (unlocked) and MATCH_PARENT (locked) layout parameters dynamically.",
+      "Integrated custom drag-and-drop gestures with pixel-perfect coordinate recovery to preserve the bubble's positioning when transitioning between locked/unlocked views.",
+      "Added security rules and local cache hydration via SharedPreferences to preserve active target apps configuration and service status after device reboots or application terminations.",
+      "Developed localized UI supports (l10n) in Flutter with static state caching to prevent unnecessary platform IPC roundtrips."
+    ],
+    "features": [
+      "Event-driven background app checking (zero background battery drain).",
+      "Programmatic WindowManager assistive bubble with custom drag-and-drop placement.",
+      "Seamless touch-blocking (removes dark backgrounds and massive popups entirely for absolute minimal visual footprint).",
+      "Double-tap gesture to unlock preventing accidental inputs or face taps while sleeping.",
+      "State persistence and caching (SharedPreferences and Dart process cache)."
+    ],
+    "architecture": {
+      "description": "Uses a hybrid Flutter + Kotlin Native architecture communicating via MethodChannel IPC. The Kotlin layer acts as a system-level background daemon checking foreground app state via AccessibilityService and drawing overlays using system WindowManager, while the Flutter app serves as an administrative UI for target settings and caching."
+    },
+    "apiPreview": {
+      "language": "kotlin",
+      "code": "btn.setOnTouchListener { v, event ->\n    val params = overlayParams ?: return@setOnTouchListener false\n    when (event.action) {\n        MotionEvent.ACTION_DOWN -> {\n            initialRawX = event.rawX; initialRawY = event.rawY\n            initialX = params.x; initialY = params.y\n            true\n        }\n        MotionEvent.ACTION_MOVE -> {\n            if (currentState == OverlayState.IDLE) {\n                val deltaX = event.rawX - initialRawX\n                val deltaY = event.rawY - initialRawY\n                params.x = initialX + deltaX.toInt()\n                params.y = initialY + deltaY.toInt()\n                windowManager.updateViewLayout(root, params)\n            }\n            true\n        }\n        MotionEvent.ACTION_UP -> {\n            val distance = Math.hypot((event.rawX - initialRawX).toDouble(), (event.rawY - initialRawY).toDouble())\n            if (distance < 10.0) {\n                v.performClick()\n                updateState(if (currentState == OverlayState.IDLE) OverlayState.LOCKED else OverlayState.IDLE)\n            }\n            true\n        }\n        else -> false\n    }\n}"
+    },
+    "gallery": [],
+    "challenges": "Preventing the assistive bubble from shifting or jumping when resizing the window layout params from WRAP_CONTENT to MATCH_PARENT, and avoiding accidental triggers while sleeping.",
+    "solutions": "Locked layout parameter gravity to Gravity.TOP or Gravity.START for 1:1 screen mapping, and offset the bubble dynamically inside the parent view using precise layout coordinate shifts (.x / .y). Implemented a double-tap unlock threshold to ensure security.",
+    "lessonsLearned": "Gained deep understanding of low-level Android OS background limits, WindowManager rendering lifecycles, gesture threshold processing, and high-performance hybrid IPC bridge optimization.",
+    "techStack": ["Flutter", "Kotlin Native", "Android SDK", "AccessibilityService", "WindowManager API", "MethodChannel IPC"],
+    "githubUrl": "https://github.com/Febriand1/touch-blocker",
+    "liveUrl": ""
   }
 ]

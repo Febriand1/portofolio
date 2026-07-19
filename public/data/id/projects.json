@@ -63,5 +63,40 @@
     "techStack": ["TypeScript", "Chrome Extension API", "Supabase", "Vercel Cron", "Telegram Bot API"],
     "githubUrl": "https://github.com/ExtTrace/watch-tracker",
     "liveUrl": "https://wt-api-smoky.vercel.app"
+  },
+  {
+    "id": "android-touch-blocker",
+    "title": "Android Touch Blocker & Guided Access Utility",
+    "subtitle": "Aplikasi pelindung layar dan pemblokir sentuhan berbasis latar belakang (Accessibility Service) dan floating bubble terintegrasi Flutter & Kotlin Native.",
+    "overview": "Merancang dan membangun aplikasi pemblokir sentuhan layar Android (Touch Blocker) yang memantau perubahan aplikasi latar depan secara dinamis dan menggambar overlay gembok mengambang untuk memblokir input sentuhan selama konsumsi media (seperti menonton video), melindungi layar dari sentuhan tidak sengaja.",
+    "responsibilities": [
+      "Mengembangkan arsitektur mobile hybrid dengan pemisahan tugas yang ketat antara Flutter (UI Panel Kontrol) dan Kotlin Native (Background Engine).",
+      "Mengimplementasikan Android AccessibilityService untuk mendeteksi aplikasi aktif di layar secara event-driven via TYPE_WINDOW_STATE_CHANGED dan TYPE_WINDOW_CONTENT_CHANGED tanpa memicu CPU polling.",
+      "Membangun sistem WindowManager overlay secara programmatic di Kotlin Native untuk mengelola parameter WRAP_CONTENT (idle) dan MATCH_PARENT (locked) secara dinamis.",
+      "Mengintegrasikan fitur drag-and-drop dengan pemulihan koordinat pixel-perfect agar posisi gelembung gembok tidak berpindah saat transisi lock/unlock.",
+      "Menerapkan persistensi state dan hidrasi cache lokal menggunakan SharedPreferences agar daftar target paket dan status layanan tetap bertahan setelah perangkat dinyalakan ulang.",
+      "Mengembangkan dukungan lokalisasi (l10n) di Flutter lengkap dengan static state caching untuk meminimalkan roundtrip IPC."
+    ],
+    "features": [
+      "Pendeteksian aplikasi target berbasis event tanpa konsumsi baterai berlebih.",
+      "Gelembung gembok floating WindowManager dengan dukungan kustom drag-and-drop.",
+      "Pemblokiran layar seamless (menghapus latar hitam dan tulisan popup mengganggu agar pandangan video tidak terhalang).",
+      "Ketukan ganda (double-tap) untuk membuka kunci guna mencegah layar terbuka tak sengaja saat tidur.",
+      "Persistensi data dan caching (SharedPreferences & Dart cache)."
+    ],
+    "architecture": {
+      "description": "Menggunakan arsitektur hybrid Flutter + Kotlin Native yang terhubung melalui MethodChannel IPC. Sisi Kotlin Native berjalan sebagai background daemon tingkat sistem untuk membaca event window aktif dan melukis overlay WindowManager, sedangkan sisi Flutter berperan sebagai panel konfigurasi utama."
+    },
+    "apiPreview": {
+      "language": "kotlin",
+      "code": "btn.setOnTouchListener { v, event ->\n    val params = overlayParams ?: return@setOnTouchListener false\n    when (event.action) {\n        MotionEvent.ACTION_DOWN -> {\n            initialRawX = event.rawX; initialRawY = event.rawY\n            initialX = params.x; initialY = params.y\n            true\n        }\n        MotionEvent.ACTION_MOVE -> {\n            if (currentState == OverlayState.IDLE) {\n                val deltaX = event.rawX - initialRawX\n                val deltaY = event.rawY - initialRawY\n                params.x = initialX + deltaX.toInt()\n                params.y = initialY + deltaY.toInt()\n                windowManager.updateViewLayout(root, params)\n            }\n            true\n        }\n        MotionEvent.ACTION_UP -> {\n            val distance = Math.hypot((event.rawX - initialRawX).toDouble(), (event.rawY - initialRawY).toDouble())\n            if (distance < 10.0) {\n                v.performClick()\n                updateState(if (currentState == OverlayState.IDLE) OverlayState.LOCKED else OverlayState.IDLE)\n            }\n            true\n        }\n        else -> false\n    }\n}"
+    },
+    "gallery": [],
+    "challenges": "Menggunakan sinkronisasi inventori dan kalkulasi laba-rugi secara real-time pada penyimpanan SQLite lokal tanpa membebani memori sistem saat volume transaksi kasir sangat tinggi.",
+    "solutions": "Mengunci gravity WindowManager ke Gravity.TOP or Gravity.START untuk pemetaan koordinat 1:1, lalu menggeser koordinat view di dalam layout parent secara manual menggunakan properti .x dan .y. Menerapkan gestur double-tap dengan interval waktu < 300ms untuk membuka kunci.",
+    "lessonsLearned": "Memahami batasan sistem latar belakang Android OS secara mendalam, siklus hidup rendering WindowManager, kalkulasi delta gesture, serta optimasi performa jembatan IPC.",
+    "techStack": ["Flutter", "Kotlin Native", "Android SDK", "AccessibilityService", "WindowManager API", "MethodChannel IPC"],
+    "githubUrl": "https://github.com/Febriand1/touch-blocker",
+    "liveUrl": ""
   }
 ]
