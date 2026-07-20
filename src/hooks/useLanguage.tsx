@@ -136,6 +136,42 @@ const translations: TranslationDictionary = {
     id: 'Dibuat dengan React & Tailwind CSS.',
     en: 'Handcrafted with React & Tailwind CSS.',
   },
+  'notfound.title': {
+    id: 'Halaman Tidak Ditemukan',
+    en: 'Page Not Found',
+  },
+  'notfound.desc': {
+    id: 'Maaf, halaman yang Anda cari tidak ada atau telah dipindahkan.',
+    en: 'Sorry, the page you are looking for does not exist or has been moved.',
+  },
+  'notfound.cta.home': {
+    id: 'Kembali ke Beranda',
+    en: 'Back to Home',
+  },
+  'notfound.cta.projects': {
+    id: 'Lihat Proyek',
+    en: 'Explore Projects',
+  },
+  'error.title': {
+    id: 'Terjadi Kesalahan',
+    en: 'An Error Occurred',
+  },
+  'error.desc': {
+    id: 'Aplikasi mengalami kesalahan yang tidak terduga.',
+    en: 'The application encountered an unexpected error.',
+  },
+  'error.retry': {
+    id: 'Muat Ulang Halaman',
+    en: 'Reload Page',
+  },
+  'restricted.title': {
+    id: 'Akses Dibatasi',
+    en: 'Access Restricted',
+  },
+  'restricted.desc': {
+    id: 'Anda tidak memiliki izin untuk mengakses area ini.',
+    en: 'You do not have permission to access this area.',
+  },
   'loading.profile': {
     id: 'Memuat profil...',
     en: 'Loading profile...',

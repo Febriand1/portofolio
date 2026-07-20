@@ -7,11 +7,15 @@ import About from '../pages/About';
 import Experience from '../pages/Experience';
 import Contact from '../pages/Contact';
 import Admin from '../pages/Admin';
+import NotFound from '../pages/NotFound';
+import Restricted from '../pages/Restricted';
+import ErrorPage from '../pages/ErrorPage';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -40,6 +44,14 @@ export const router = createBrowserRouter([
       {
         path: 'admin',
         element: <Admin />,
+      },
+      {
+        path: 'restricted',
+        element: <Restricted />,
+      },
+      {
+        path: '*',
+        element: <NotFound />,
       },
     ],
   },
