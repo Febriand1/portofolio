@@ -73,3 +73,11 @@ export interface Social {
   label: string;
   iconName?: string; // To match icons
 }
+
+export interface JobApplication {
+  id: number;
+  company: string;
+  position: string;
+  status: string;
+  updated_at: string;
+}

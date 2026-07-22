@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Section from '../components/Section';
 import * as OTPAuth from 'otpauth';
+import { fileTypes } from '../utils/utils';
+import type { GitHubConfig } from '../types/github';
 
-const totpSecret = import.meta.env.VITE_TOTP_SECRET || 'DIRGAFEBRIANPORTFOLIOSECRETKEY32';
+const totpSecret = import.meta.env.VITE_TOTP_SECRET;
 
 const totp = new OTPAuth.TOTP({
   issuer: 'Dirga Febrian Portfolio',
@@ -10,24 +12,8 @@ const totp = new OTPAuth.TOTP({
   algorithm: 'SHA1',
   digits: 6,
   period: 30,
-  secret: totpSecret
+  secret: totpSecret,
 });
-
-interface GitHubConfig {
-  token: string;
-  owner: string;
-  repo: string;
-  branch: string;
-}
-
-const fileTypes = [
-  { value: 'projects', label: 'Projects (projects.json)' },
-  { value: 'experience', label: 'Experience (experience.json)' },
-  { value: 'skills', label: 'Skills (skills.json)' },
-  { value: 'education', label: 'Education (education.json)' },
-  { value: 'certificates', label: 'Certificates (certificates.json)' },
-  { value: 'socials', label: 'Socials (socials.json)' },
-];
 
 const Admin: React.FC = () => {
   // Auth state
@@ -48,7 +34,7 @@ const Admin: React.FC = () => {
 
   const [selectedLang, setSelectedLang] = useState<'id' | 'en'>('id');
   const [selectedFile, setSelectedFile] = useState<string>('projects');
-  
+
   // Data states
   const [dataList, setDataList] = useState<any[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -56,7 +42,9 @@ const Admin: React.FC = () => {
   const [isAddingNew, setIsAddingNew] = useState<boolean>(false);
 
   const [status, setStatus] = useState<string | null>(null);
-  const [statusType, setStatusType] = useState<'info' | 'success' | 'error' | null>(null);
+  const [statusType, setStatusType] = useState<
+    'info' | 'success' | 'error' | null
+  >(null);
 
   // Save config changes to localStorage
   useEffect(() => {
@@ -69,7 +57,9 @@ const Admin: React.FC = () => {
     setStatus('Memuat data terbaru dari server...');
     setStatusType('info');
     try {
-      const response = await fetch(`/data/${selectedLang}/${selectedFile}.json`);
+      const response = await fetch(
+        `/data/${selectedLang}/${selectedFile}.json`,
+      );
       if (response.ok) {
         const data = await response.json();
         if (Array.isArray(data)) {
@@ -105,14 +95,16 @@ const Admin: React.FC = () => {
 
     const delta = totp.validate({
       token: otpInput.trim(),
-      window: 1
+      window: 1,
     });
 
     if (delta !== null) {
       sessionStorage.setItem('portfolio_admin_auth', 'true');
       setIsAuthenticated(true);
     } else {
-      setLoginError('Kode OTP salah atau telah kedaluwarsa. Silakan coba lagi.');
+      setLoginError(
+        'Kode OTP salah atau telah kedaluwarsa. Silakan coba lagi.',
+      );
     }
   };
 
@@ -159,7 +151,9 @@ const Admin: React.FC = () => {
     } else if (selectedFile === 'skills') {
       newStub.id = 'new-category';
       newStub.category = '';
-      newStub.skills = [{ name: '', level: 'Intermediate', yearsOfExperience: 1 }];
+      newStub.skills = [
+        { name: '', level: 'Intermediate', yearsOfExperience: 1 },
+      ];
     } else if (selectedFile === 'education') {
       newStub.id = 'new-education';
       newStub.institution = '';
@@ -196,7 +190,9 @@ const Admin: React.FC = () => {
     setEditingIndex(null);
     setEditForm(null);
     setIsAddingNew(false);
-    setStatus('Perubahan disimpan sementara di memori browser. Klik "Simpan & Push ke GitHub" untuk menerapkan secara permanen.');
+    setStatus(
+      'Perubahan disimpan sementara di memori browser. Klik "Simpan & Push ke GitHub" untuk menerapkan secara permanen.',
+    );
     setStatusType('info');
   };
 
@@ -204,14 +200,18 @@ const Admin: React.FC = () => {
     if (window.confirm('Apakah Anda yakin ingin menghapus item ini?')) {
       const updatedList = dataList.filter((_, i) => i !== index);
       setDataList(updatedList);
-      setStatus('Item berhasil dihapus sementara dari memori. Klik "Simpan & Push ke GitHub" untuk menerapkan.');
+      setStatus(
+        'Item berhasil dihapus sementara dari memori. Klik "Simpan & Push ke GitHub" untuk menerapkan.',
+      );
       setStatusType('info');
     }
   };
 
   const handlePushToGitHub = async () => {
     if (!config.token || !config.owner || !config.repo) {
-      setStatus('Error: Konfigurasi GitHub belum lengkap (Token, Owner, dan Repo wajib diisi).');
+      setStatus(
+        'Error: Konfigurasi GitHub belum lengkap (Token, Owner, dan Repo wajib diisi).',
+      );
       setStatusType('error');
       return;
     }
@@ -229,7 +229,9 @@ const Admin: React.FC = () => {
     try {
       let sha: string | null = null;
       try {
-        const getFileResponse = await fetch(`${url}?ref=${config.branch}`, { headers });
+        const getFileResponse = await fetch(`${url}?ref=${config.branch}`, {
+          headers,
+        });
         if (getFileResponse.ok) {
           const fileData = await getFileResponse.json();
           sha = fileData.sha;
@@ -241,7 +243,7 @@ const Admin: React.FC = () => {
       setStatus('Mengunggah berkas baru ke repositori...');
       const jsonString = JSON.stringify(dataList, null, 2);
       const encodedContent = btoa(unescape(encodeURIComponent(jsonString)));
-      
+
       const body = {
         message: `update: data ${selectedFile}.json (${selectedLang}) via Web CMS Panel`,
         content: encodedContent,
@@ -259,7 +261,9 @@ const Admin: React.FC = () => {
       });
 
       if (putResponse.ok) {
-        setStatus('Sukses! Data berhasil di-push ke GitHub. Proses deploy otomatis berjalan.');
+        setStatus(
+          'Sukses! Data berhasil di-push ke GitHub. Proses deploy otomatis berjalan.',
+        );
         setStatusType('success');
       } else {
         const errorData = await putResponse.json();
@@ -301,7 +305,8 @@ const Admin: React.FC = () => {
               Panel Keamanan Admin
             </h1>
             <p className="text-sm text-neutral-500 font-sans">
-              Masukkan kode 6-digit Authenticator Anda untuk mengakses panel pengelolaan data portofolio.
+              Masukkan kode 6-digit Authenticator Anda untuk mengakses panel
+              pengelolaan data portofolio.
             </p>
           </div>
 
@@ -340,14 +345,19 @@ const Admin: React.FC = () => {
               onClick={() => setShowSetup(!showSetup)}
               className="text-xs font-semibold text-neutral-400 hover:text-brand transition-colors"
             >
-              {showSetup ? 'Sembunyikan Petunjuk Setup' : 'Tampilkan Petunjuk Setup (2FA)'}
+              {showSetup
+                ? 'Sembunyikan Petunjuk Setup'
+                : 'Tampilkan Petunjuk Setup (2FA)'}
             </button>
-            
+
             {showSetup && (
               <div className="mt-4 p-4 bg-neutral-light rounded-lg border border-border-light text-left text-xs space-y-2">
-                <p className="font-semibold text-neutral-dark">Petunjuk Google Authenticator:</p>
+                <p className="font-semibold text-neutral-dark">
+                  Petunjuk Google Authenticator:
+                </p>
                 <p className="text-neutral-500 leading-relaxed">
-                  Buka Google Authenticator, tambahkan akun baru secara manual (**setup key**), masukkan kunci rahasia ini:
+                  Buka Google Authenticator, tambahkan akun baru secara manual
+                  (**setup key**), masukkan kunci rahasia ini:
                 </p>
                 <div className="font-mono bg-card-custom border border-border-light px-2 py-1.5 rounded text-center font-bold text-neutral-700 select-all">
                   {totpSecret}
@@ -368,7 +378,8 @@ const Admin: React.FC = () => {
             Panel Visual CMS Portofolio
           </h1>
           <p className="text-sm text-neutral-500 font-sans">
-            Gunakan formulir visual di bawah untuk mengelola proyek, karir, dan detail data portofolio.
+            Gunakan formulir visual di bawah untuk mengelola proyek, karir, dan
+            detail data portofolio.
           </p>
         </div>
         <div className="flex gap-2">
@@ -393,27 +404,37 @@ const Admin: React.FC = () => {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1">GitHub PAT Token</label>
+              <label className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1">
+                GitHub PAT Token
+              </label>
               <input
                 type="password"
                 placeholder="ghp_xxxx"
                 value={config.token}
-                onChange={(e) => setConfig({ ...config, token: e.target.value })}
+                onChange={(e) =>
+                  setConfig({ ...config, token: e.target.value })
+                }
                 className="w-full px-3 py-1.5 border border-border-light rounded text-xs focus:outline-none focus:ring-2 focus:ring-brand font-mono"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1">GitHub Owner</label>
+              <label className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1">
+                GitHub Owner
+              </label>
               <input
                 type="text"
                 placeholder="Owner"
                 value={config.owner}
-                onChange={(e) => setConfig({ ...config, owner: e.target.value })}
+                onChange={(e) =>
+                  setConfig({ ...config, owner: e.target.value })
+                }
                 className="w-full px-3 py-1.5 border border-border-light rounded text-xs focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1">Repo Name</label>
+              <label className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1">
+                Repo Name
+              </label>
               <input
                 type="text"
                 placeholder="Repo"
@@ -423,12 +444,16 @@ const Admin: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1">Branch</label>
+              <label className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1">
+                Branch
+              </label>
               <input
                 type="text"
                 placeholder="main"
                 value={config.branch}
-                onChange={(e) => setConfig({ ...config, branch: e.target.value })}
+                onChange={(e) =>
+                  setConfig({ ...config, branch: e.target.value })
+                }
                 className="w-full px-3 py-1.5 border border-border-light rounded text-xs focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
@@ -444,7 +469,9 @@ const Admin: React.FC = () => {
             </h3>
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="flex-1">
-                <label className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">Pilih Bahasa</label>
+                <label className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">
+                  Pilih Bahasa
+                </label>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setSelectedLang('id')}
@@ -470,7 +497,9 @@ const Admin: React.FC = () => {
               </div>
 
               <div className="flex-1">
-                <label className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">Pilih File Data</label>
+                <label className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">
+                  Pilih File Data
+                </label>
                 <select
                   value={selectedFile}
                   onChange={(e) => setSelectedFile(e.target.value)}
@@ -505,41 +534,57 @@ const Admin: React.FC = () => {
                   <>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">ID Proyek (Kunci Unik)</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          ID Proyek (Kunci Unik)
+                        </label>
                         <input
                           type="text"
                           value={editForm.id || ''}
-                          onChange={(e) => setEditForm({ ...editForm, id: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({ ...editForm, id: e.target.value })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Judul Proyek</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Judul Proyek
+                        </label>
                         <input
                           type="text"
                           value={editForm.title || ''}
-                          onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({ ...editForm, title: e.target.value })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-neutral-500 mb-1">Sub-judul / Deskripsi Pendek</label>
+                      <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                        Sub-judul / Deskripsi Pendek
+                      </label>
                       <input
                         type="text"
                         value={editForm.subtitle || ''}
-                        onChange={(e) => setEditForm({ ...editForm, subtitle: e.target.value })}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, subtitle: e.target.value })
+                        }
                         className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-neutral-500 mb-1">Ikhtisar Proyek (Overview)</label>
+                      <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                        Ikhtisar Proyek (Overview)
+                      </label>
                       <textarea
                         rows={4}
                         value={editForm.overview || ''}
-                        onChange={(e) => setEditForm({ ...editForm, overview: e.target.value })}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, overview: e.target.value })
+                        }
                         className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand font-sans"
                       />
                     </div>
@@ -547,7 +592,9 @@ const Admin: React.FC = () => {
                     {/* Tech Stack List */}
                     <div>
                       <div className="flex justify-between items-center mb-1">
-                        <label className="block text-xs font-semibold text-neutral-500">Tech Stack (Daftar Teknologi)</label>
+                        <label className="block text-xs font-semibold text-neutral-500">
+                          Tech Stack (Daftar Teknologi)
+                        </label>
                         <button
                           type="button"
                           onClick={() => addArrayFieldRow('techStack')}
@@ -558,16 +605,23 @@ const Admin: React.FC = () => {
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {editForm.techStack?.map((tech: string, i: number) => (
-                          <div key={i} className="flex items-center gap-1 border border-border-light rounded px-2 py-1 bg-neutral-light">
+                          <div
+                            key={i}
+                            className="flex items-center gap-1 border border-border-light rounded px-2 py-1 bg-neutral-light"
+                          >
                             <input
                               type="text"
                               value={tech}
-                              onChange={(e) => updateArrayField('techStack', i, e.target.value)}
+                              onChange={(e) =>
+                                updateArrayField('techStack', i, e.target.value)
+                              }
                               className="bg-transparent border-0 p-0 text-xs w-20 focus:ring-0 focus:outline-none"
                             />
                             <button
                               type="button"
-                              onClick={() => removeArrayFieldRow('techStack', i)}
+                              onClick={() =>
+                                removeArrayFieldRow('techStack', i)
+                              }
                               className="text-neutral-400 hover:text-red-500 text-xs font-bold px-1"
                             >
                               &times;
@@ -580,7 +634,9 @@ const Admin: React.FC = () => {
                     {/* Responsibilities list */}
                     <div>
                       <div className="flex justify-between items-center mb-1">
-                        <label className="block text-xs font-semibold text-neutral-500">Tanggung Jawab Utama</label>
+                        <label className="block text-xs font-semibold text-neutral-500">
+                          Tanggung Jawab Utama
+                        </label>
                         <button
                           type="button"
                           onClick={() => addArrayFieldRow('responsibilities')}
@@ -590,30 +646,42 @@ const Admin: React.FC = () => {
                         </button>
                       </div>
                       <div className="space-y-2">
-                        {editForm.responsibilities?.map((resp: string, i: number) => (
-                          <div key={i} className="flex items-center gap-2">
-                            <input
-                              type="text"
-                              value={resp}
-                              onChange={(e) => updateArrayField('responsibilities', i, e.target.value)}
-                              className="w-full px-3 py-1.5 border border-border-light rounded text-xs focus:outline-none focus:ring-2 focus:ring-brand"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => removeArrayFieldRow('responsibilities', i)}
-                              className="text-red-500 hover:text-red-700 text-sm font-bold px-2"
-                            >
-                              &times;
-                            </button>
-                          </div>
-                        ))}
+                        {editForm.responsibilities?.map(
+                          (resp: string, i: number) => (
+                            <div key={i} className="flex items-center gap-2">
+                              <input
+                                type="text"
+                                value={resp}
+                                onChange={(e) =>
+                                  updateArrayField(
+                                    'responsibilities',
+                                    i,
+                                    e.target.value,
+                                  )
+                                }
+                                className="w-full px-3 py-1.5 border border-border-light rounded text-xs focus:outline-none focus:ring-2 focus:ring-brand"
+                              />
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  removeArrayFieldRow('responsibilities', i)
+                                }
+                                className="text-red-500 hover:text-red-700 text-sm font-bold px-2"
+                              >
+                                &times;
+                              </button>
+                            </div>
+                          ),
+                        )}
                       </div>
                     </div>
 
                     {/* Features list */}
                     <div>
                       <div className="flex justify-between items-center mb-1">
-                        <label className="block text-xs font-semibold text-neutral-500">Fitur Utama</label>
+                        <label className="block text-xs font-semibold text-neutral-500">
+                          Fitur Utama
+                        </label>
                         <button
                           type="button"
                           onClick={() => addArrayFieldRow('features')}
@@ -628,7 +696,9 @@ const Admin: React.FC = () => {
                             <input
                               type="text"
                               value={feat}
-                              onChange={(e) => updateArrayField('features', i, e.target.value)}
+                              onChange={(e) =>
+                                updateArrayField('features', i, e.target.value)
+                              }
                               className="w-full px-3 py-1.5 border border-border-light rounded text-xs focus:outline-none focus:ring-2 focus:ring-brand"
                             />
                             <button
@@ -644,34 +714,55 @@ const Admin: React.FC = () => {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-neutral-500 mb-1">Deskripsi Arsitektur</label>
+                      <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                        Deskripsi Arsitektur
+                      </label>
                       <textarea
                         rows={3}
                         value={editForm.architecture?.description || ''}
-                        onChange={(e) => setEditForm({
-                          ...editForm,
-                          architecture: { ...editForm.architecture, description: e.target.value }
-                        })}
+                        onChange={(e) =>
+                          setEditForm({
+                            ...editForm,
+                            architecture: {
+                              ...editForm.architecture,
+                              description: e.target.value,
+                            },
+                          })
+                        }
                         className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">GitHub URL</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          GitHub URL
+                        </label>
                         <input
                           type="text"
                           value={editForm.githubUrl || ''}
-                          onChange={(e) => setEditForm({ ...editForm, githubUrl: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              githubUrl: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Live Demo URL</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Live Demo URL
+                        </label>
                         <input
                           type="text"
                           value={editForm.liveUrl || ''}
-                          onChange={(e) => setEditForm({ ...editForm, liveUrl: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              liveUrl: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
@@ -679,27 +770,41 @@ const Admin: React.FC = () => {
 
                     <div className="grid grid-cols-3 gap-4 border-t border-border-light pt-4">
                       <div className="col-span-1">
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Bahasa Cuplikan API</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Bahasa Cuplikan API
+                        </label>
                         <input
                           type="text"
                           value={editForm.apiPreview?.language || ''}
-                          onChange={(e) => setEditForm({
-                            ...editForm,
-                            apiPreview: { ...editForm.apiPreview, language: e.target.value }
-                          })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              apiPreview: {
+                                ...editForm.apiPreview,
+                                language: e.target.value,
+                              },
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand font-mono"
                           placeholder="typescript / dart / go"
                         />
                       </div>
                       <div className="col-span-2">
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Kode Cuplikan API</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Kode Cuplikan API
+                        </label>
                         <textarea
                           rows={6}
                           value={editForm.apiPreview?.code || ''}
-                          onChange={(e) => setEditForm({
-                            ...editForm,
-                            apiPreview: { ...editForm.apiPreview, code: e.target.value }
-                          })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              apiPreview: {
+                                ...editForm.apiPreview,
+                                code: e.target.value,
+                              },
+                            })
+                          }
                           className="w-full p-2 border border-border-light rounded font-mono text-xs focus:outline-none focus:ring-2 focus:ring-brand leading-relaxed"
                           placeholder="// tulis kode"
                         />
@@ -708,29 +813,50 @@ const Admin: React.FC = () => {
 
                     <div className="border-t border-border-light pt-4 space-y-3">
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Tantangan Utama</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Tantangan Utama
+                        </label>
                         <textarea
                           rows={2}
                           value={editForm.challenges || ''}
-                          onChange={(e) => setEditForm({ ...editForm, challenges: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              challenges: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Solusi yang Diterapkan</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Solusi yang Diterapkan
+                        </label>
                         <textarea
                           rows={2}
                           value={editForm.solutions || ''}
-                          onChange={(e) => setEditForm({ ...editForm, solutions: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              solutions: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Pelajaran yang Diambil</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Pelajaran yang Diambil
+                        </label>
                         <textarea
                           rows={2}
                           value={editForm.lessonsLearned || ''}
-                          onChange={(e) => setEditForm({ ...editForm, lessonsLearned: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              lessonsLearned: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
@@ -742,20 +868,31 @@ const Admin: React.FC = () => {
                   <>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Role / Jabatan</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Role / Jabatan
+                        </label>
                         <input
                           type="text"
                           value={editForm.role || ''}
-                          onChange={(e) => setEditForm({ ...editForm, role: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({ ...editForm, role: e.target.value })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Nama Instansi/Perusahaan</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Nama Instansi/Perusahaan
+                        </label>
                         <input
                           type="text"
                           value={editForm.company || ''}
-                          onChange={(e) => setEditForm({ ...editForm, company: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              company: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
@@ -763,30 +900,48 @@ const Admin: React.FC = () => {
 
                     <div className="grid grid-cols-3 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Lokasi</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Lokasi
+                        </label>
                         <input
                           type="text"
                           value={editForm.location || ''}
-                          onChange={(e) => setEditForm({ ...editForm, location: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              location: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Jenis Kontrak</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Jenis Kontrak
+                        </label>
                         <input
                           type="text"
                           value={editForm.type || ''}
-                          onChange={(e) => setEditForm({ ...editForm, type: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({ ...editForm, type: e.target.value })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                           placeholder="Full-time / Internship"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Situs Perusahaan (Opsional)</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Situs Perusahaan (Opsional)
+                        </label>
                         <input
                           type="text"
                           value={editForm.companyUrl || ''}
-                          onChange={(e) => setEditForm({ ...editForm, companyUrl: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              companyUrl: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
@@ -794,21 +949,35 @@ const Admin: React.FC = () => {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Tanggal Mulai (YYYY-MM)</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Tanggal Mulai (YYYY-MM)
+                        </label>
                         <input
                           type="text"
                           value={editForm.startDate || ''}
-                          onChange={(e) => setEditForm({ ...editForm, startDate: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              startDate: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand font-mono"
                           placeholder="2025-12"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Tanggal Berakhir (YYYY-MM)</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Tanggal Berakhir (YYYY-MM)
+                        </label>
                         <input
                           type="text"
                           value={editForm.endDate || ''}
-                          onChange={(e) => setEditForm({ ...editForm, endDate: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              endDate: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand font-mono"
                           placeholder="2026-06 atau Present"
                         />
@@ -816,11 +985,18 @@ const Admin: React.FC = () => {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-neutral-500 mb-1">Ikhtisar Jabatan (Description)</label>
+                      <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                        Ikhtisar Jabatan (Description)
+                      </label>
                       <textarea
                         rows={3}
                         value={editForm.description || ''}
-                        onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                        onChange={(e) =>
+                          setEditForm({
+                            ...editForm,
+                            description: e.target.value,
+                          })
+                        }
                         className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                       />
                     </div>
@@ -828,7 +1004,9 @@ const Admin: React.FC = () => {
                     {/* Achievements List */}
                     <div>
                       <div className="flex justify-between items-center mb-1">
-                        <label className="block text-xs font-semibold text-neutral-500">Pencapaian Utama</label>
+                        <label className="block text-xs font-semibold text-neutral-500">
+                          Pencapaian Utama
+                        </label>
                         <button
                           type="button"
                           onClick={() => addArrayFieldRow('achievements')}
@@ -838,30 +1016,42 @@ const Admin: React.FC = () => {
                         </button>
                       </div>
                       <div className="space-y-2">
-                        {editForm.achievements?.map((ach: string, i: number) => (
-                          <div key={i} className="flex items-center gap-2">
-                            <input
-                              type="text"
-                              value={ach}
-                              onChange={(e) => updateArrayField('achievements', i, e.target.value)}
-                              className="w-full px-3 py-1.5 border border-border-light rounded text-xs focus:outline-none focus:ring-2 focus:ring-brand"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => removeArrayFieldRow('achievements', i)}
-                              className="text-red-500 hover:text-red-700 text-sm font-bold px-2"
-                            >
-                              &times;
-                            </button>
-                          </div>
-                        ))}
+                        {editForm.achievements?.map(
+                          (ach: string, i: number) => (
+                            <div key={i} className="flex items-center gap-2">
+                              <input
+                                type="text"
+                                value={ach}
+                                onChange={(e) =>
+                                  updateArrayField(
+                                    'achievements',
+                                    i,
+                                    e.target.value,
+                                  )
+                                }
+                                className="w-full px-3 py-1.5 border border-border-light rounded text-xs focus:outline-none focus:ring-2 focus:ring-brand"
+                              />
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  removeArrayFieldRow('achievements', i)
+                                }
+                                className="text-red-500 hover:text-red-700 text-sm font-bold px-2"
+                              >
+                                &times;
+                              </button>
+                            </div>
+                          ),
+                        )}
                       </div>
                     </div>
 
                     {/* Tech Stack List */}
                     <div>
                       <div className="flex justify-between items-center mb-1">
-                        <label className="block text-xs font-semibold text-neutral-500">Teknologi yang Digunakan (Tech Stack)</label>
+                        <label className="block text-xs font-semibold text-neutral-500">
+                          Teknologi yang Digunakan (Tech Stack)
+                        </label>
                         <button
                           type="button"
                           onClick={() => addArrayFieldRow('techStack')}
@@ -872,16 +1062,23 @@ const Admin: React.FC = () => {
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {editForm.techStack?.map((tech: string, i: number) => (
-                          <div key={i} className="flex items-center gap-1 border border-border-light rounded px-2 py-1 bg-neutral-light">
+                          <div
+                            key={i}
+                            className="flex items-center gap-1 border border-border-light rounded px-2 py-1 bg-neutral-light"
+                          >
                             <input
                               type="text"
                               value={tech}
-                              onChange={(e) => updateArrayField('techStack', i, e.target.value)}
+                              onChange={(e) =>
+                                updateArrayField('techStack', i, e.target.value)
+                              }
                               className="bg-transparent border-0 p-0 text-xs w-20 focus:ring-0 focus:outline-none"
                             />
                             <button
                               type="button"
-                              onClick={() => removeArrayFieldRow('techStack', i)}
+                              onClick={() =>
+                                removeArrayFieldRow('techStack', i)
+                              }
                               className="text-neutral-400 hover:text-red-500 text-xs font-bold px-1"
                             >
                               &times;
@@ -896,11 +1093,15 @@ const Admin: React.FC = () => {
                 {selectedFile === 'skills' && (
                   <>
                     <div>
-                      <label className="block text-xs font-semibold text-neutral-500 mb-1">Nama Kategori Kemampuan</label>
+                      <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                        Nama Kategori Kemampuan
+                      </label>
                       <input
                         type="text"
                         value={editForm.category || ''}
-                        onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, category: e.target.value })
+                        }
                         className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                       />
                     </div>
@@ -908,12 +1109,21 @@ const Admin: React.FC = () => {
                     {/* Sub Skills items management */}
                     <div className="border-t border-border-light pt-4 space-y-3">
                       <div className="flex justify-between items-center">
-                        <label className="block text-xs font-semibold text-neutral-500 font-heading">Daftar Kemampuan Spesifik</label>
+                        <label className="block text-xs font-semibold text-neutral-500 font-heading">
+                          Daftar Kemampuan Spesifik
+                        </label>
                         <button
                           type="button"
                           onClick={() => {
                             const updated = { ...editForm };
-                            updated.skills = [...updated.skills, { name: '', level: 'Intermediate', yearsOfExperience: 1 }];
+                            updated.skills = [
+                              ...updated.skills,
+                              {
+                                name: '',
+                                level: 'Intermediate',
+                                yearsOfExperience: 1,
+                              },
+                            ];
                             setEditForm(updated);
                           }}
                           className="text-xs font-semibold text-brand hover:underline"
@@ -923,12 +1133,17 @@ const Admin: React.FC = () => {
                       </div>
 
                       {editForm.skills?.map((subSkill: any, i: number) => (
-                        <div key={i} className="flex flex-col sm:flex-row gap-3 p-3 border border-border-light rounded bg-neutral-light/40 relative">
+                        <div
+                          key={i}
+                          className="flex flex-col sm:flex-row gap-3 p-3 border border-border-light rounded bg-neutral-light/40 relative"
+                        >
                           <button
                             type="button"
                             onClick={() => {
                               const updated = { ...editForm };
-                              updated.skills = updated.skills.filter((_: any, idx: number) => idx !== i);
+                              updated.skills = updated.skills.filter(
+                                (_: any, idx: number) => idx !== i,
+                              );
                               setEditForm(updated);
                             }}
                             className="absolute top-2 right-2 text-neutral-400 hover:text-red-500 text-sm font-bold"
@@ -936,7 +1151,9 @@ const Admin: React.FC = () => {
                             &times;
                           </button>
                           <div className="flex-1">
-                            <label className="block text-[10px] uppercase font-semibold text-neutral-400 mb-1">Nama Teknologi</label>
+                            <label className="block text-[10px] uppercase font-semibold text-neutral-400 mb-1">
+                              Nama Teknologi
+                            </label>
                             <input
                               type="text"
                               value={subSkill.name || ''}
@@ -949,7 +1166,9 @@ const Admin: React.FC = () => {
                             />
                           </div>
                           <div className="w-32">
-                            <label className="block text-[10px] uppercase font-semibold text-neutral-400 mb-1">Tingkat</label>
+                            <label className="block text-[10px] uppercase font-semibold text-neutral-400 mb-1">
+                              Tingkat
+                            </label>
                             <input
                               type="text"
                               value={subSkill.level || ''}
@@ -963,13 +1182,16 @@ const Admin: React.FC = () => {
                             />
                           </div>
                           <div className="w-24">
-                            <label className="block text-[10px] uppercase font-semibold text-neutral-400 mb-1">Tahun Exp</label>
+                            <label className="block text-[10px] uppercase font-semibold text-neutral-400 mb-1">
+                              Tahun Exp
+                            </label>
                             <input
                               type="number"
                               value={subSkill.yearsOfExperience || 0}
                               onChange={(e) => {
                                 const updated = { ...editForm };
-                                updated.skills[i].yearsOfExperience = parseInt(e.target.value) || 0;
+                                updated.skills[i].yearsOfExperience =
+                                  parseInt(e.target.value) || 0;
                                 setEditForm(updated);
                               }}
                               className="w-full px-2 py-1 border border-border-light bg-card-custom rounded text-xs"
@@ -985,20 +1207,31 @@ const Admin: React.FC = () => {
                   <>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Nama Instansi</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Nama Instansi
+                        </label>
                         <input
                           type="text"
                           value={editForm.institution || ''}
-                          onChange={(e) => setEditForm({ ...editForm, institution: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              institution: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Gelar (Degree)</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Gelar (Degree)
+                        </label>
                         <input
                           type="text"
                           value={editForm.degree || ''}
-                          onChange={(e) => setEditForm({ ...editForm, degree: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({ ...editForm, degree: e.target.value })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                           placeholder="Sarjana Komputer (S.Kom)"
                         />
@@ -1007,40 +1240,68 @@ const Admin: React.FC = () => {
 
                     <div className="grid grid-cols-3 gap-4">
                       <div className="col-span-1">
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Bidang Studi (Field)</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Bidang Studi (Field)
+                        </label>
                         <input
                           type="text"
                           value={editForm.fieldOfStudy || ''}
-                          onChange={(e) => setEditForm({ ...editForm, fieldOfStudy: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              fieldOfStudy: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Tanggal Mulai (YYYY-MM)</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Tanggal Mulai (YYYY-MM)
+                        </label>
                         <input
                           type="text"
                           value={editForm.startDate || ''}
-                          onChange={(e) => setEditForm({ ...editForm, startDate: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              startDate: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand font-mono"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Tanggal Selesai (YYYY-MM)</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Tanggal Selesai (YYYY-MM)
+                        </label>
                         <input
                           type="text"
                           value={editForm.endDate || ''}
-                          onChange={(e) => setEditForm({ ...editForm, endDate: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              endDate: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand font-mono"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-neutral-500 mb-1">Deskripsi Tambahan</label>
+                      <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                        Deskripsi Tambahan
+                      </label>
                       <textarea
                         rows={2}
                         value={editForm.description || ''}
-                        onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                        onChange={(e) =>
+                          setEditForm({
+                            ...editForm,
+                            description: e.target.value,
+                          })
+                        }
                         className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                       />
                     </div>
@@ -1051,20 +1312,28 @@ const Admin: React.FC = () => {
                   <>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Nama Sertifikat</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Nama Sertifikat
+                        </label>
                         <input
                           type="text"
                           value={editForm.title || ''}
-                          onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({ ...editForm, title: e.target.value })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Lembaga Penerbit</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Lembaga Penerbit
+                        </label>
                         <input
                           type="text"
                           value={editForm.issuer || ''}
-                          onChange={(e) => setEditForm({ ...editForm, issuer: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({ ...editForm, issuer: e.target.value })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
@@ -1072,31 +1341,52 @@ const Admin: React.FC = () => {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Tanggal Terbit</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Tanggal Terbit
+                        </label>
                         <input
                           type="text"
                           value={editForm.issueDate || ''}
-                          onChange={(e) => setEditForm({ ...editForm, issueDate: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              issueDate: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">ID Kredensial</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          ID Kredensial
+                        </label>
                         <input
                           type="text"
                           value={editForm.credentialId || ''}
-                          onChange={(e) => setEditForm({ ...editForm, credentialId: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              credentialId: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-neutral-500 mb-1">URL Verifikasi Kredensial</label>
+                      <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                        URL Verifikasi Kredensial
+                      </label>
                       <input
                         type="text"
                         value={editForm.credentialUrl || ''}
-                        onChange={(e) => setEditForm({ ...editForm, credentialUrl: e.target.value })}
+                        onChange={(e) =>
+                          setEditForm({
+                            ...editForm,
+                            credentialUrl: e.target.value,
+                          })
+                        }
                         className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                       />
                     </div>
@@ -1107,21 +1397,32 @@ const Admin: React.FC = () => {
                   <>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Nama Platform</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Nama Platform
+                        </label>
                         <input
                           type="text"
                           value={editForm.platform || ''}
-                          onChange={(e) => setEditForm({ ...editForm, platform: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              platform: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                           placeholder="GitHub / LinkedIn / Email"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Teks Tautan (Label)</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Teks Tautan (Label)
+                        </label>
                         <input
                           type="text"
                           value={editForm.label || ''}
-                          onChange={(e) => setEditForm({ ...editForm, label: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({ ...editForm, label: e.target.value })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                           placeholder="Hubungkan di LinkedIn"
                         />
@@ -1130,20 +1431,31 @@ const Admin: React.FC = () => {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">URL Link</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          URL Link
+                        </label>
                         <input
                           type="text"
                           value={editForm.url || ''}
-                          onChange={(e) => setEditForm({ ...editForm, url: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({ ...editForm, url: e.target.value })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 mb-1">Nama Ikon (Opsional)</label>
+                        <label className="block text-xs font-semibold text-neutral-500 mb-1">
+                          Nama Ikon (Opsional)
+                        </label>
                         <input
                           type="text"
                           value={editForm.iconName || ''}
-                          onChange={(e) => setEditForm({ ...editForm, iconName: e.target.value })}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              iconName: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-border-light rounded text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                       </div>
@@ -1191,7 +1503,9 @@ const Admin: React.FC = () => {
 
               {dataList.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-sm text-neutral-400">Tidak ada data terunggah.</p>
+                  <p className="text-sm text-neutral-400">
+                    Tidak ada data terunggah.
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
@@ -1202,13 +1516,23 @@ const Admin: React.FC = () => {
                     >
                       <div className="text-left">
                         <p className="text-sm font-bold text-neutral-dark">
-                          {item.title || item.role || item.category || item.institution || item.platform || 'Item Tanpa Nama'}
+                          {item.title ||
+                            item.role ||
+                            item.category ||
+                            item.institution ||
+                            item.platform ||
+                            'Item Tanpa Nama'}
                         </p>
                         <p className="text-xs text-neutral-400 mt-1">
-                          {item.subtitle || item.company || item.degree || item.issuer || item.url || ''}
+                          {item.subtitle ||
+                            item.company ||
+                            item.degree ||
+                            item.issuer ||
+                            item.url ||
+                            ''}
                         </p>
                       </div>
-                      
+
                       <div className="flex gap-2">
                         <button
                           onClick={() => startEdit(i)}

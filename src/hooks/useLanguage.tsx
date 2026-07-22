@@ -15,6 +15,7 @@ const translations: TranslationDictionary = {
   'nav.about': { id: 'Tentang', en: 'About' },
   'nav.experience': { id: 'Pengalaman', en: 'Experience' },
   'nav.contact': { id: 'Kontak', en: 'Contact' },
+  'nav.jobs': { id: 'Lamaran', en: 'Applications' },
   'hero.badge': {
     id: 'Fullstack Developer',
     en: 'Fullstack Developer',
@@ -195,6 +196,82 @@ const translations: TranslationDictionary = {
   'loading.contact': {
     id: 'Memuat saluran komunikasi...',
     en: 'Loading contact channels...',
+  },
+  'jobs.title': {
+    id: 'Pelacak Lamaran Kerja',
+    en: 'Job Applications Tracker',
+  },
+  'jobs.desc': {
+    id: 'Daftar perusahaan dan posisi yang telah saya lamar beserta status perkembangannya secara real-time.',
+    en: 'Real-time list of companies and positions I have applied to, along with their current status.',
+  },
+  'jobs.search.placeholder': {
+    id: 'Cari perusahaan atau posisi...',
+    en: 'Search company or position...',
+  },
+  'jobs.filter.all': {
+    id: 'Semua Status',
+    en: 'All Statuses',
+  },
+  'jobs.table.company': {
+    id: 'Perusahaan',
+    en: 'Company',
+  },
+  'jobs.table.position': {
+    id: 'Posisi',
+    en: 'Position',
+  },
+  'jobs.table.status': {
+    id: 'Status',
+    en: 'Status',
+  },
+  'jobs.table.updated': {
+    id: 'Pembaruan Terakhir',
+    en: 'Last Updated',
+  },
+  'jobs.stats.total': {
+    id: 'Total Lamaran',
+    en: 'Total Applications',
+  },
+  'jobs.stats.applied': {
+    id: 'Terkirim (Applied)',
+    en: 'Applied',
+  },
+  'jobs.stats.test': {
+    id: 'Tes Teknis',
+    en: 'Technical Test',
+  },
+  'jobs.stats.interview': {
+    id: 'Wawancara',
+    en: 'Interview',
+  },
+  'jobs.stats.offering': {
+    id: 'Diterima (Offering)',
+    en: 'Offering',
+  },
+  'jobs.stats.rejected': {
+    id: 'Ditolak',
+    en: 'Rejected',
+  },
+  'jobs.loading': {
+    id: 'Memuat data lamaran kerja...',
+    en: 'Loading job applications data...',
+  },
+  'jobs.error': {
+    id: 'Gagal memuat data lamaran kerja. Silakan coba lagi nanti.',
+    en: 'Failed to load job applications. Please try again later.',
+  },
+  'jobs.empty': {
+    id: 'Tidak ada data lamaran kerja yang cocok.',
+    en: 'No matching job applications found.',
+  },
+  'jobs.order.newest': {
+    id: 'Terbaru',
+    en: 'Newest',
+  },
+  'jobs.order.oldest': {
+    id: 'Terlama',
+    en: 'Oldest',
   },
 };
 
