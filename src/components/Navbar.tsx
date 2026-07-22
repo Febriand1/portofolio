@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../hooks/useLanguage';
 import { useTheme } from '../hooks/useTheme';
+import { useAuth } from '../hooks/useAuth';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
+
+  const navigate = useNavigate();
+
+  const { isAuthenticated, logout } = useAuth();
 
   const navItems = [
     { name: t('nav.home'), path: '/' },
@@ -95,12 +100,32 @@ const Navbar: React.FC = () => {
             >
               {language === 'id' ? 'EN' : 'ID'}
             </button>
+
+            {isAuthenticated && (
+              <button
+                onClick={() => {
+                  logout();
+                  navigate('/');
+                }}
+                className="px-4 py-2 border border-border-light hover:bg-neutral-light text-red-400 text-xs font-semibold rounded"
+              >
+                Logout
+              </button>
+            )}
           </div>
         </div>
 
         {/* Mobile menu button and theme/lang switch */}
         <div className="flex items-center space-x-2 md:hidden">
           {/* Mobile Theme Toggle Button */}
+          <button
+            onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
+            className="px-2 py-1 text-xs font-semibold border border-border-light hover:bg-neutral-light text-neutral-600 dark:text-neutral-300 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-brand"
+            aria-label="Switch Language"
+          >
+            {language === 'id' ? 'EN' : 'ID'}
+          </button>
+
           <button
             onClick={toggleTheme}
             className="p-1.5 border border-border-light hover:bg-neutral-light text-neutral-600 dark:text-neutral-300 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-brand"
@@ -138,17 +163,9 @@ const Navbar: React.FC = () => {
           </button>
 
           <button
-            onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
-            className="px-2 py-1 text-xs font-semibold border border-border-light hover:bg-neutral-light text-neutral-600 dark:text-neutral-300 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-brand"
-            aria-label="Switch Language"
-          >
-            {language === 'id' ? 'EN' : 'ID'}
-          </button>
-
-          <button
             onClick={() => setIsOpen(!isOpen)}
             type="button"
-            className="p-2 rounded-md text-neutral-600 dark:text-neutral-300 hover:text-neutral-dark hover:bg-neutral-light focus:outline-none focus:ring-2 focus:ring-brand"
+            className="p-2 border border-border-light hover:bg-neutral-light rounded text-neutral-600 dark:text-neutral-300 hover:text-neutral-dark hover:bg-neutral-light focus:outline-none focus:ring-2 focus:ring-brand"
             aria-controls="mobile-menu"
             aria-expanded={isOpen}
           >
@@ -209,6 +226,18 @@ const Navbar: React.FC = () => {
                 {item.name}
               </NavLink>
             ))}
+            {isAuthenticated && (
+              <button
+                onClick={() => {
+                  logout();
+                  navigate('/');
+                  setIsOpen(false);
+                }}
+                className="px-4 py-2 border border-border-light hover:bg-neutral-light text-red-400 text-xs font-semibold rounded"
+              >
+                Logout
+              </button>
+            )}
           </nav>
         </div>
       )}

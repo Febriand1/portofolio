@@ -3,6 +3,8 @@ import Section from '../components/Section';
 import { useLanguage } from '../hooks/useLanguage';
 import { dataService } from '../services/dataService';
 import type { JobApplication } from '../types/portfolio';
+import SecurityPanel from '../components/SecurityPanel';
+import { useAuth } from '../hooks/useAuth';
 
 const JobApplications: React.FC = () => {
   const { language, t } = useLanguage();
@@ -28,6 +30,8 @@ const JobApplications: React.FC = () => {
     hasNextPage: boolean;
     hasPrevPage: boolean;
   } | null>(null);
+
+  const { isAuthenticated } = useAuth();
 
   // Debouncing search input
   useEffect(() => {
@@ -169,6 +173,11 @@ const JobApplications: React.FC = () => {
     return 'bg-neutral-50 dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 border-border-light';
   };
 
+  // Auth check: Job Tracker is private and requires Admin 2FA session
+  if (!isAuthenticated) {
+    return <SecurityPanel />;
+  }
+
   if (loading && paginatedData.length === 0) {
     return (
       <div className="py-24 text-center">
@@ -217,7 +226,7 @@ const JobApplications: React.FC = () => {
             {t('jobs.desc')}
           </p>
         </div>
-        <div>
+        <div className="flex gap-2">
           <button
             onClick={handleSync}
             className="px-4 py-2 border border-border-light hover:bg-neutral-light text-neutral-600 dark:text-neutral-300 text-xs font-semibold rounded transition-colors focus:outline-none focus:ring-2 focus:ring-brand flex items-center gap-1.5"
