@@ -81,3 +81,16 @@ export interface JobApplication {
   status: string;
   updated_at: string;
 }
+
+export interface PaginatedJobsResponse {
+  success: boolean;
+  data: JobApplication[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+  };
+}

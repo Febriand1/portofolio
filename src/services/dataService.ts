@@ -6,6 +6,7 @@ import type {
   Certificate,
   Social,
   JobApplication,
+  PaginatedJobsResponse,
 } from '../types/portfolio';
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -50,29 +51,86 @@ export const dataService = {
     return fetchJson<Social[]>(`/data/${lang}/socials.json`);
   },
 
-  async getJobApplications(forceRefresh = false): Promise<JobApplication[]> {
-    const JOBS_CACHE_KEY = 'portfolio_jobs_cache';
-    const JOBS_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+  async getJobApplications(
+    page: number,
+    limit: number,
+    status: string,
+    search: string,
+    order: string,
+    forceRefresh = false,
+  ): Promise<PaginatedJobsResponse> {
+    const CACHE_KEY = `jobs_cache_p${page}_l${limit}_s${status}_q${search}_o${order}`;
+    const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
     if (!forceRefresh) {
-      const cached = localStorage.getItem(JOBS_CACHE_KEY);
+      const cached = localStorage.getItem(CACHE_KEY);
       if (cached) {
         try {
-          const { timestamp, data } = JSON.parse(cached);
-          const isFresh = Date.now() - timestamp < JOBS_CACHE_TTL;
-          if (isFresh && Array.isArray(data)) {
-            return data as JobApplication[];
+          const { timestamp, response } = JSON.parse(cached);
+          const isFresh = Date.now() - timestamp < CACHE_TTL;
+          if (isFresh && response && response.success) {
+            return response as PaginatedJobsResponse;
           }
         } catch (e) {
-          console.error('Failed to parse job applications cache:', e);
+          console.error('Failed to parse paginated jobs cache:', e);
         }
       }
     }
 
+    const params = new URLSearchParams();
+    params.append('page', String(page));
+    params.append('limit', String(limit));
+    if (status && status !== 'all') {
+      params.append('status', status);
+    }
+    if (search && search.trim()) {
+      params.append('search', search.trim());
+    }
+    params.append('order', order);
+
+    const url = `${apiUrl}/jobs?${params.toString()}`;
+    const result = await fetchJson<PaginatedJobsResponse>(url);
+
+    if (result && result.success) {
+      try {
+        const cacheObj = {
+          timestamp: Date.now(),
+          response: result,
+        };
+        localStorage.setItem(CACHE_KEY, JSON.stringify(cacheObj));
+      } catch (e) {
+        console.error('Failed to set paginated jobs cache:', e);
+      }
+      return result;
+    }
+    throw new Error('Invalid response format for paginated job applications');
+  },
+
+  async getJobGlobalStats(forceRefresh = false): Promise<JobApplication[]> {
+    const STATS_CACHE_KEY = 'portfolio_jobs_global_stats_cache';
+    const STATS_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+    if (!forceRefresh) {
+      const cached = localStorage.getItem(STATS_CACHE_KEY);
+      if (cached) {
+        try {
+          const { timestamp, data } = JSON.parse(cached);
+          const isFresh = Date.now() - timestamp < STATS_CACHE_TTL;
+          if (isFresh && Array.isArray(data)) {
+            return data as JobApplication[];
+          }
+        } catch (e) {
+          console.error('Failed to parse global stats jobs cache:', e);
+        }
+      }
+    }
+
+    const url = `${apiUrl}/jobs??order=desc`;
+    // Fetch the entire dataset to compute stats
     const result = await fetchJson<{
       success: boolean;
       data: JobApplication[];
-    }>(`${apiUrl}/jobs`);
+    }>(url);
     if (result && result.success && Array.isArray(result.data)) {
       const data = result.data;
       try {
@@ -80,12 +138,12 @@ export const dataService = {
           timestamp: Date.now(),
           data,
         };
-        localStorage.setItem(JOBS_CACHE_KEY, JSON.stringify(cacheObj));
+        localStorage.setItem(STATS_CACHE_KEY, JSON.stringify(cacheObj));
       } catch (e) {
-        console.error('Failed to set job applications cache:', e);
+        console.error('Failed to set global stats jobs cache:', e);
       }
       return data;
     }
-    throw new Error('Invalid response format for job applications');
+    throw new Error('Invalid response format for job applications stats');
   },
 };
