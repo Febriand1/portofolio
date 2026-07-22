@@ -17,7 +17,6 @@ const SecurityPanel: React.FC = () => {
   const { login } = useAuth();
   const [otpInput, setOtpInput] = useState<string>('');
   const [loginError, setLoginError] = useState<string | null>(null);
-  const [showSetup, setShowSetup] = useState<boolean>(false);
 
   const handleVerifyOtp = (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,32 +77,6 @@ const SecurityPanel: React.FC = () => {
             Verifikasi & Masuk
           </button>
         </form>
-
-        <div className="mt-8 border-t border-border-light pt-4 text-center">
-          <button
-            onClick={() => setShowSetup(!showSetup)}
-            className="text-xs font-semibold text-neutral-400 hover:text-brand transition-colors"
-          >
-            {showSetup
-              ? 'Sembunyikan Petunjuk Setup'
-              : 'Tampilkan Petunjuk Setup (2FA)'}
-          </button>
-
-          {showSetup && (
-            <div className="mt-4 p-4 bg-neutral-light rounded-lg border border-border-light text-left text-xs space-y-2">
-              <p className="font-semibold text-neutral-dark">
-                Petunjuk Google Authenticator:
-              </p>
-              <p className="text-neutral-500 leading-relaxed">
-                Buka Google Authenticator, tambahkan akun baru secara manual
-                (**setup key**), masukkan kunci rahasia ini:
-              </p>
-              <div className="font-mono bg-card-custom border border-border-light px-2 py-1.5 rounded text-center font-bold text-neutral-700 select-all">
-                {totpSecret}
-              </div>
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );
