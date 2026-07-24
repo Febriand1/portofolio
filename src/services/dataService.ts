@@ -125,7 +125,7 @@ export const dataService = {
       }
     }
 
-    const url = `${apiUrl}/jobs?order=desc`;
+    const url = `${apiUrl}/jobs?limit=1000&order=desc`;
     // Fetch the entire dataset to compute stats
     const result = await fetchJson<{
       success: boolean;
