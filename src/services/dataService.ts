@@ -5,8 +5,8 @@ import type {
   Education,
   Certificate,
   Social,
-  JobApplication,
   PaginatedJobsResponse,
+  JobStatsResponse,
 } from '../types/portfolio';
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -106,7 +106,7 @@ export const dataService = {
     throw new Error('Invalid response format for paginated job applications');
   },
 
-  async getJobGlobalStats(forceRefresh = false): Promise<JobApplication[]> {
+  async getJobGlobalStats(forceRefresh = false): Promise<JobStatsResponse['data']> {
     const STATS_CACHE_KEY = 'portfolio_jobs_global_stats_cache';
     const STATS_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
@@ -116,8 +116,8 @@ export const dataService = {
         try {
           const { timestamp, data } = JSON.parse(cached);
           const isFresh = Date.now() - timestamp < STATS_CACHE_TTL;
-          if (isFresh && Array.isArray(data)) {
-            return data as JobApplication[];
+          if (isFresh && data && typeof data.Total === 'number') {
+            return data as JobStatsResponse['data'];
           }
         } catch (e) {
           console.error('Failed to parse global stats jobs cache:', e);
@@ -125,13 +125,9 @@ export const dataService = {
       }
     }
 
-    const url = `${apiUrl}/jobs?limit=1000&order=desc`;
-    // Fetch the entire dataset to compute stats
-    const result = await fetchJson<{
-      success: boolean;
-      data: JobApplication[];
-    }>(url);
-    if (result && result.success && Array.isArray(result.data)) {
+    const url = `${apiUrl}/job-stats`;
+    const result = await fetchJson<JobStatsResponse>(url);
+    if (result && result.success && result.data) {
       const data = result.data;
       try {
         const cacheObj = {

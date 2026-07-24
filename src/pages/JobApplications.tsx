@@ -2,13 +2,13 @@ import React, { useEffect, useState, useMemo } from 'react';
 import Section from '../components/Section';
 import { useLanguage } from '../hooks/useLanguage';
 import { dataService } from '../services/dataService';
-import type { JobApplication } from '../types/portfolio';
+import type { JobApplication, JobStatsResponse } from '../types/portfolio';
 import SecurityPanel from '../components/SecurityPanel';
 import { useAuth } from '../hooks/useAuth';
 
 const JobApplications: React.FC = () => {
   const { language, t } = useLanguage();
-  const [allApplications, setAllApplications] = useState<JobApplication[]>([]);
+  const [globalStats, setGlobalStats] = useState<JobStatsResponse['data'] | null>(null);
   const [paginatedData, setPaginatedData] = useState<JobApplication[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -50,7 +50,7 @@ const JobApplications: React.FC = () => {
   const loadGlobalStats = async (forceRefresh = false) => {
     try {
       const data = await dataService.getJobGlobalStats(forceRefresh);
-      setAllApplications(data);
+      setGlobalStats(data);
     } catch (e) {
       console.error('Failed to load global job stats:', e);
     }
@@ -98,35 +98,20 @@ const JobApplications: React.FC = () => {
   // Compute statistics from global list
   const stats = useMemo(() => {
     return {
-      total: allApplications.length,
-      applied: allApplications.filter((a) =>
-        a.status.toLowerCase().includes('applied'),
-      ).length,
-      test: allApplications.filter(
-        (a) =>
-          a.status.toLowerCase().includes('test') ||
-          a.status.toLowerCase().includes('task'),
-      ).length,
-      interview: allApplications.filter((a) =>
-        a.status.toLowerCase().includes('interview'),
-      ).length,
-      offering: allApplications.filter(
-        (a) =>
-          a.status.toLowerCase().includes('offering') ||
-          a.status.toLowerCase().includes('accept'),
-      ).length,
-      rejected: allApplications.filter(
-        (a) =>
-          a.status.toLowerCase().includes('reject') ||
-          a.status.toLowerCase().includes('drop'),
-      ).length,
+      total: globalStats?.Total || 0,
+      applied: globalStats?.Applied || 0,
+      test: globalStats?.['Technical Test'] || 0,
+      interview: globalStats?.Interview || 0,
+      offering: (globalStats?.Offering || 0) + (globalStats?.Accepted || 0),
+      rejected: globalStats?.Rejected || 0,
     };
-  }, [allApplications]);
+  }, [globalStats]);
 
   // Compute unique statuses for dropdown options
   const availableStatuses = useMemo(() => {
-    return Array.from(new Set(allApplications.map((a) => a.status))).sort();
-  }, [allApplications]);
+    if (!globalStats) return [];
+    return Object.keys(globalStats).filter((key) => key !== 'Total').sort();
+  }, [globalStats]);
 
   // Formatter for localized date
   const formatDate = (dateStr: string) => {

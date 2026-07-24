@@ -84,7 +84,9 @@ export interface JobApplication {
 
 export interface PaginatedJobsResponse {
   success: boolean;
-  data: JobApplication[];
+  data: {
+    [key: string]: any;
+  } & JobApplication[];
   pagination: {
     page: number;
     limit: number;
@@ -92,5 +94,18 @@ export interface PaginatedJobsResponse {
     totalPages: number;
     hasNextPage: boolean;
     hasPrevPage: boolean;
+  };
+}
+
+export interface JobStatsResponse {
+  success: boolean;
+  data: {
+    Applied: number;
+    Interview: number;
+    "Technical Test": number;
+    Offering: number;
+    Accepted: number;
+    Rejected: number;
+    Total: number;
   };
 }
