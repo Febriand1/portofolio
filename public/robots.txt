@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://febriand.vercel.app/sitemap.xml
+Sitemap: https://dirgafeb.my.id/sitemap.xml
