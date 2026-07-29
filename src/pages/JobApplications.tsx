@@ -8,7 +8,9 @@ import { useAuth } from '../hooks/useAuth';
 
 const JobApplications: React.FC = () => {
   const { language, t } = useLanguage();
-  const [globalStats, setGlobalStats] = useState<JobStatsResponse['data'] | null>(null);
+  const [globalStats, setGlobalStats] = useState<
+    JobStatsResponse['data'] | null
+  >(null);
   const [paginatedData, setPaginatedData] = useState<JobApplication[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -100,7 +102,8 @@ const JobApplications: React.FC = () => {
     return {
       total: globalStats?.Total || 0,
       applied: globalStats?.Applied || 0,
-      test: globalStats?.['Technical Test'] || 0,
+      ptest: globalStats?.['Psychological Test'] || 0,
+      ttest: globalStats?.['Technical Test'] || 0,
       interview: globalStats?.Interview || 0,
       offering: (globalStats?.Offering || 0) + (globalStats?.Accepted || 0),
       rejected: globalStats?.Rejected || 0,
@@ -110,7 +113,9 @@ const JobApplications: React.FC = () => {
   // Compute unique statuses for dropdown options
   const availableStatuses = useMemo(() => {
     if (!globalStats) return [];
-    return Object.keys(globalStats).filter((key) => key !== 'Total').sort();
+    return Object.keys(globalStats)
+      .filter((key) => key !== 'Total')
+      .sort();
   }, [globalStats]);
 
   // Formatter for localized date
@@ -226,7 +231,7 @@ const JobApplications: React.FC = () => {
       </Section>
 
       {/* Summary Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-7 gap-4">
         {/* Total */}
         <div className="bg-card-custom border border-border-light rounded-lg p-4 flex flex-col justify-between shadow-sm">
           <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
@@ -246,12 +251,20 @@ const JobApplications: React.FC = () => {
           </span>
         </div>
         {/* Test */}
-        <div className="bg-card-custom border-l-4 border-l-amber-500 border border-border-light rounded-lg p-4 flex flex-col justify-between shadow-sm">
+        <div className="bg-card-custom border-l-4 border-l-yellow-500 border border-border-light rounded-lg p-4 flex flex-col justify-between shadow-sm">
           <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
-            {t('jobs.stats.test')}
+            {t('jobs.stats.ptest')}
           </span>
-          <span className="text-3xl font-bold font-heading text-amber-600 dark:text-amber-400 mt-2">
-            {stats.test}
+          <span className="text-3xl font-bold font-heading text-yellow-600 dark:text-yellow-400 mt-2">
+            {stats.ptest}
+          </span>
+        </div>
+        <div className="bg-card-custom border-l-4 border-l-orange-500 border border-border-light rounded-lg p-4 flex flex-col justify-between shadow-sm">
+          <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
+            {t('jobs.stats.ttest')}
+          </span>
+          <span className="text-3xl font-bold font-heading text-orange-600 dark:text-orange-400 mt-2">
+            {stats.ttest}
           </span>
         </div>
         {/* Interview */}

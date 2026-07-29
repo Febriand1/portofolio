@@ -237,7 +237,11 @@ const translations: TranslationDictionary = {
     id: 'Terkirim (Applied)',
     en: 'Applied',
   },
-  'jobs.stats.test': {
+  'jobs.stats.ptest': {
+    id: 'Tes Psikologi',
+    en: 'Psychological Test',
+  },
+  'jobs.stats.ttest': {
     id: 'Tes Teknis',
     en: 'Technical Test',
   },

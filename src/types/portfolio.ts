@@ -102,7 +102,8 @@ export interface JobStatsResponse {
   data: {
     Applied: number;
     Interview: number;
-    "Technical Test": number;
+    'Psychological Test': number;
+    'Technical Test': number;
     Offering: number;
     Accepted: number;
     Rejected: number;
