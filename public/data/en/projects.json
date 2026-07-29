@@ -98,5 +98,47 @@
     "techStack": ["Flutter", "Kotlin Native", "Android SDK", "AccessibilityService", "WindowManager API", "MethodChannel IPC"],
     "githubUrl": "https://github.com/Febriand1/touch-blocker",
     "liveUrl": ""
+  },
+  {
+    "id": "web-screensaver-digital-clock",
+    "title": "Web Screensaver & Digital Clock Suite",
+    "subtitle": "A multi-platform futuristic digital clock web app and native Android DreamService wrapper featuring OLED burn-in protection.",
+    "overview": "Designed and built a multi-platform digital clock and screensaver suite consisting of a futuristic web clock (digital-clock) built with HTML5, CSS3, and Canvas, alongside a native Android wrapper (webscreensaverandroid) powered by Kotlin DreamService to run web apps as official Android system screensavers.",
+    "responsibilities": [
+      "Developed the interactive digital clock web application (digital-clock) using Vanilla HTML/CSS/JS ES Modules with 3D Parallax Tilt, Canvas Cosmic Dust particles, and custom color pickers.",
+      "Implemented a random pixel-shifting algorithm every 60 seconds to prevent AMOLED, OLED, and IPS screen burn-in during prolonged screensaver sessions.",
+      "Built the native Android app (webscreensaverandroid) using Kotlin and the DreamService API (Daydream) to render the web app in fullscreen while charging or docked.",
+      "Created a bi-directional communication bridge (JavascriptInterface) between WebView and Kotlin Native to allow web UI exit buttons to close the Android screensaver instantly.",
+      "Designed a clean Material 3 AMOLED Dark settings interface with dynamic status bar inset handling and native screensaver picker thumbnail preview."
+    ],
+    "features": [
+      "High-precision digital clock with 12/24-hour toggle and OLED burn-in protection.",
+      "Interactive Canvas Cosmic Dust particle system and 3D Parallax Tilt effect.",
+      "Official Android DreamService (Daydream) integration with thumbnail preview in system settings.",
+      "Native JavascriptInterface bridge allowing web UI buttons to close the screensaver.",
+      "Smart Query Parameter routing (?mode=android & ?mode=windows) with full GitHub Pages support."
+    ],
+    "architecture": {
+      "description": "The system employs a decoupled hybrid architecture. The web frontend uses pure Vanilla Web Standards (ES Modules & Canvas) for instant loading in WebView containers. The Android wrapper is built natively in Kotlin implementing DreamService and WebView with IPC communication via JavascriptInterface."
+    },
+    "apiPreview": {
+      "language": "kotlin",
+      "code": "class ClockDreamService : DreamService() {\n    inner class AndroidBridge {\n        @JavascriptInterface\n        fun exitScreensaver() {\n            finish()\n        }\n    }\n\n    override fun onAttachedToWindow() {\n        super.onAttachedToWindow()\n        isInteractive = true\n        isFullscreen = true\n        webView = WebView(this).apply {\n            settings.javaScriptEnabled = true\n            addJavascriptInterface(AndroidBridge(), \"AndroidBridge\")\n            loadUrl(prefs.getString(PREF_URL, DEFAULT_URL)!)\n        }\n        setContentView(webView)\n    }\n}"
+    },
+    "gallery": [],
+    "challenges": "Ensuring the clock interface remains interactive for color customization while providing a seamless, intuitive mechanism for users to terminate the screensaver.",
+    "solutions": "Enabled interactive mode on DreamService, implemented a JavascriptInterface bridge to handle UI exit taps, and utilized the Page Visibility API to pause Canvas rendering when inactive.",
+    "lessonsLearned": "Mastered native Android DreamService API development, WebView JavascriptInterface integration, Canvas 2D manipulation, and OLED screen optimization techniques.",
+    "techStack": [
+      "Kotlin Native",
+      "Android DreamService",
+      "WebView API",
+      "JavaScript (ES6+)",
+      "HTML5 Canvas",
+      "CSS Glassmorphism",
+      "GitHub Pages"
+    ],
+    "githubUrl": "https://github.com/ExtTrace/web-screensaver-android",
+    "liveUrl": "https://exttrace.github.io"
   }
 ]

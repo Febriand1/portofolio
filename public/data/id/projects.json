@@ -98,5 +98,39 @@
     "techStack": ["Flutter", "Kotlin Native", "Android SDK", "AccessibilityService", "WindowManager API", "MethodChannel IPC"],
     "githubUrl": "https://github.com/Febriand1/touch-blocker",
     "liveUrl": ""
+  },
+  {
+    "id": "web-screensaver-android",
+    "title": "Web Screensaver & Digital Clock Suite",
+    "subtitle": "Ekosistem jam digital futuristik berbasis Web GL/Canvas dan pembungkus Android DreamService native dengan fitur pencegah OLED burn-in.",
+    "overview": "Merancang dan membangun ekosistem jam digital dan screensaver multi-platform yang terdiri dari aplikasi web jam digital futuristik (digital-clock) menggunakan HTML5, CSS3, dan Canvas, serta pembungkus Android native (webscreensaverandroid) berbasis Kotlin DreamService untuk menjadikan aplikasi web sebagai screensaver resmi HP Android.",
+    "responsibilities": [
+      "Mengembangkan aplikasi web jam digital interaktif (digital-clock) menggunakan Vanilla HTML/CSS/JS ES Modules dengan efek 3D Parallax Tilt, partikel Cosmic Dust pada Canvas, dan pemilih warna kustom.",
+      "Mengimplementasikan algoritma pergeseran piksel acak (pixel shifting) setiap 60 detik untuk mencegah efek screen burn-in pada layar AMOLED, OLED, dan IPS selama sesi screensaver berdurasi panjang.",
+      "Membangun aplikasi Android native (webscreensaverandroid) menggunakan Kotlin dan DreamService API (Daydream) untuk menjalankan aplikasi web di layar penuh saat perangkat diisi daya.",
+      "Membuat jembatan komunikasi dua arah (JavascriptInterface) antara WebView dan Kotlin Native agar tombol keluar di UI web dapat menghentikan screensaver Android secara instan.",
+      "Merancang antarmuka pengaturan Android yang bersih dan elegan bergaya Material 3 AMOLED Dark dengan penanganan insets bilah status dinamis dan pratinjau thumbnail native."
+    ],
+    "features": [
+      "Jam digital presisi tinggi dengan toggle format 12/24 jam dan proteksi OLED burn-in.",
+      "Efek partikel Cosmic Dust Canvas dan 3D Parallax Tilt interaktif.",
+      "Integrasi resmi Android DreamService (Daydream) dengan pratinjau thumbnail di menu Settings HP.",
+      "Jembatan native (JavascriptInterface) untuk keluar dari screensaver via tombol UI web.",
+      "Routing cerdas berbasis Query Parameter (?mode=android & ?mode=windows) dengan dukungan penuh GitHub Pages."
+    ],
+    "architecture": {
+      "description": "Ekosistem ini menggunakan arsitektur hybrid terpisah. Sisi web dibangun menggunakan Vanilla Web Standards (ES Modules & Canvas) tanpa dependensi berat agar ringan dimuat di WebView. Sisi Android dibangun menggunakan Kotlin native mengimplementasikan DreamService dan WebView dengan komunikasi IPC melalui JavascriptInterface."
+    },
+    "apiPreview": {
+      "language": "kotlin",
+      "code": "class ClockDreamService : DreamService() {\n    inner class AndroidBridge {\n        @JavascriptInterface\n        fun exitScreensaver() {\n            finish()\n        }\n    }\n\n    override fun onAttachedToWindow() {\n        super.onAttachedToWindow()\n        isInteractive = true\n        isFullscreen = true\n        webView = WebView(this).apply {\n            settings.javaScriptEnabled = true\n            addJavascriptInterface(AndroidBridge(), \"AndroidBridge\")\n            loadUrl(prefs.getString(PREF_URL, DEFAULT_URL)!)\n        }\n        setContentView(webView)\n    }\n}"
+    },
+    "gallery": [],
+    "challenges": "Memastikan antarmuka jam dapat berinteraksi dengan pengguna di Android tanpa kehilangan kemampuan keluar dari mode screensaver, serta mengoptimalkan penggunaan CPU & baterai saat layar aktif dalam waktu lama.",
+    "solutions": "Mengaktifkan mode interaktif pada DreamService dan membangun JavascriptInterface bridge untuk mendeteksi klik tombol keluar di UI web, serta memanfaatkan Page Visibility API untuk menghentikan animasi Canvas saat layar mati.",
+    "lessonsLearned": "Menguasai pembuatan Android DreamService API native, integrasi WebView JavascriptInterface, teknik manipulasi Canvas 2D, serta optimasi layar OLED.",
+    "techStack": ["Kotlin Native", "Android DreamService", "WebView API", "JavaScript (ES6+)", "HTML5 Canvas", "CSS Glassmorphism", "GitHub Pages"],
+    "githubUrl": "https://github.com/ExtTrace/web-screensaver-android",
+    "liveUrl": "https://exttrace.github.io"
   }
 ]
