@@ -3,7 +3,7 @@ import { dataService } from '../services/dataService';
 import type { Education, Certificate } from '../types/portfolio';
 import Section from '../components/Section';
 import { useLanguage } from '../hooks/useLanguage';
-import Loading from '../components/loading';
+import { SkeletonAbout } from '../components/Skeletons';
 
 const About: React.FC = () => {
   const { language, t } = useLanguage();
@@ -35,34 +35,9 @@ const About: React.FC = () => {
     loadAboutData();
   }, [language]);
 
-  <Loading loading={loading} loadingText={t('loading.about')} error={error} />;
-
-  return (
-    <div className="space-y-6">
-      <Section className="pt-8 pb-12">
-        <h1 className="text-3xl font-extrabold font-heading text-neutral-dark mb-4">
-          {t('about.title')}
-        </h1>
-        <p className="text-lg text-neutral-600 dark:text-neutral-300 font-sans max-w-2xl">
-          {t('about.desc')}
-        </p>
-      </Section>
-
-      {/* Biography */}
-      <Section className="space-y-4">
-        <h2 className="text-xl font-bold font-heading text-neutral-dark border-b border-border-light pb-2">
-          {t('about.bio.title')}
-        </h2>
-        <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed">
-          {t('about.bio.p1')}
-        </p>
-        <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed">
-          {t('about.bio.p2')}
-        </p>
-      </Section>
-
-      {/* Education */}
-      {education.length > 0 && (
+  const EducationSection = () => {
+    return (
+      education.length > 0 && (
         <Section className="space-y-6">
           <h2 className="text-xl font-bold font-heading text-neutral-dark border-b border-border-light pb-2">
             {t('about.education.title')}
@@ -93,10 +68,13 @@ const About: React.FC = () => {
             ))}
           </div>
         </Section>
-      )}
+      )
+    );
+  };
 
-      {/* Certifications */}
-      {certificates.length > 0 && (
+  const CertificatesSection = () => {
+    return (
+      certificates.length > 0 && (
         <Section className="border-b-0 space-y-6">
           <h2 className="text-xl font-bold font-heading text-neutral-dark border-b border-border-light pb-2">
             {t('about.certs.title')}
@@ -140,6 +118,43 @@ const About: React.FC = () => {
             ))}
           </div>
         </Section>
+      )
+    );
+  };
+
+  return (
+    <div className="space-y-6">
+      <Section className="pt-8 pb-12">
+        <h1 className="text-3xl font-extrabold font-heading text-neutral-dark mb-4">
+          {t('about.title')}
+        </h1>
+        <p className="text-lg text-neutral-600 dark:text-neutral-300 font-sans max-w-2xl">
+          {t('about.desc')}
+        </p>
+      </Section>
+
+      {/* Biography */}
+      <Section className="space-y-4">
+        <h2 className="text-xl font-bold font-heading text-neutral-dark border-b border-border-light pb-2">
+          {t('about.bio.title')}
+        </h2>
+        <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed">
+          {t('about.bio.p1')}
+        </p>
+        <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed">
+          {t('about.bio.p2')}
+        </p>
+      </Section>
+
+      {loading ? (
+        <SkeletonAbout />
+      ) : error ? (
+        <div className="text-center py-12 text-red-500 font-sans">{error}</div>
+      ) : (
+        <>
+          <EducationSection />
+          <CertificatesSection />
+        </>
       )}
     </div>
   );

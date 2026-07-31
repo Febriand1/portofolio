@@ -3,7 +3,7 @@ import { dataService } from '../services/dataService';
 import type { Social } from '../types/portfolio';
 import Section from '../components/Section';
 import { useLanguage } from '../hooks/useLanguage';
-import Loading from '../components/loading';
+import { SkeletonContact } from '../components/Skeletons';
 
 const Contact: React.FC = () => {
   const { language, t } = useLanguage();
@@ -29,12 +29,6 @@ const Contact: React.FC = () => {
     loadSocials();
   }, [language]);
 
-  <Loading
-    loading={loading}
-    loadingText={t('loading.contact')}
-    error={error}
-  />;
-
   return (
     <div className="space-y-6">
       <Section className="pt-8 pb-12">
@@ -48,32 +42,38 @@ const Contact: React.FC = () => {
 
       {/* Social Grids */}
       <Section className="border-b-0">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {socials.map((social) => (
-            <div
-              key={social.platform}
-              className="border border-border-light rounded-lg p-6 bg-card-custom hover:border-brand/40 transition-colors flex flex-col justify-between"
-            >
-              <div>
-                <h3 className="text-lg font-bold font-heading text-neutral-dark mb-2">
-                  {social.platform}
-                </h3>
-                <p className="text-sm text-neutral-600 dark:text-neutral-300 font-sans mb-6">
-                  {social.label}
-                </p>
-              </div>
-
-              <a
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block text-center px-4 py-2 bg-neutral-light border border-border-light hover:bg-neutral-300/60 dark:hover:bg-neutral-900/10 hover:text-brand text-neutral-600 dark:text-neutral-300 hover:dark:text-brand text-xs font-semibold rounded transition-colors focus:outline-none focus:ring-2 focus:ring-brand"
+        {loading ? (
+          <SkeletonContact count={3} />
+        ) : error ? (
+          <div className="text-center py-12 text-red-500 font-sans">{error}</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {socials.map((social) => (
+              <div
+                key={social.platform}
+                className="border border-border-light rounded-lg p-6 bg-card-custom hover:border-brand/40 transition-colors flex flex-col justify-between"
               >
-                {t('contact.connect')} &rarr;
-              </a>
-            </div>
-          ))}
-        </div>
+                <div>
+                  <h3 className="text-lg font-bold font-heading text-neutral-dark mb-2">
+                    {social.platform}
+                  </h3>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-300 font-sans mb-6">
+                    {social.label}
+                  </p>
+                </div>
+
+                <a
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block text-center px-4 py-2 bg-neutral-light border border-border-light hover:bg-neutral-300/60 dark:hover:bg-neutral-900/10 hover:text-brand text-neutral-600 dark:text-neutral-300 hover:dark:text-brand text-xs font-semibold rounded transition-colors focus:outline-none focus:ring-2 focus:ring-brand"
+                >
+                  {t('contact.connect')} &rarr;
+                </a>
+              </div>
+            ))}
+          </div>
+        )}
       </Section>
     </div>
   );

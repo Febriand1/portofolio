@@ -4,7 +4,7 @@ import type { Project } from '../types/portfolio';
 import ProjectCard from '../components/ProjectCard';
 import Section from '../components/Section';
 import { useLanguage } from '../hooks/useLanguage';
-import Loading from '../components/loading';
+import { SkeletonProjectsGrid } from '../components/Skeletons';
 
 const Projects: React.FC = () => {
   const { language, t } = useLanguage();
@@ -38,12 +38,6 @@ const Projects: React.FC = () => {
   const filteredProjects = selectedTech
     ? projects.filter((project) => project.techStack.includes(selectedTech))
     : projects;
-
-  <Loading
-    loading={loading}
-    loadingText={t('loading.projects')}
-    error={error}
-  />;
 
   return (
     <div className="space-y-6">
@@ -92,7 +86,11 @@ const Projects: React.FC = () => {
 
       {/* Projects Grid */}
       <Section className="border-b-0">
-        {filteredProjects.length === 0 ? (
+        {loading ? (
+          <SkeletonProjectsGrid count={4} />
+        ) : error ? (
+          <div className="text-center py-12 text-red-500 font-sans">{error}</div>
+        ) : filteredProjects.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-neutral-600 dark:text-neutral-300">
               {t('projects.empty')}

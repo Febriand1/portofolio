@@ -5,7 +5,7 @@ import Timeline, { TimelineItem } from '../components/Timeline';
 import Badge from '../components/Badge';
 import Section from '../components/Section';
 import { useLanguage } from '../hooks/useLanguage';
-import Loading from '../components/loading';
+import { SkeletonExperienceTimeline } from '../components/Skeletons';
 
 const Experience: React.FC = () => {
   const { language, t } = useLanguage();
@@ -32,12 +32,6 @@ const Experience: React.FC = () => {
     loadExperience();
   }, [language]);
 
-  <Loading
-    loading={loading}
-    loadingText={t('loading.experience')}
-    error={error}
-  />;
-
   return (
     <div className="space-y-6">
       <Section className="pt-8 pb-12">
@@ -50,51 +44,57 @@ const Experience: React.FC = () => {
       </Section>
 
       <Section className="border-b-0 pt-4">
-        <Timeline>
-          {experience.map((job) => (
-            <TimelineItem
-              key={job.id}
-              date={`${job.startDate} — ${job.endDate}`}
-              title={job.role}
-              subtitle={
-                job.companyUrl ? (
-                  <a
-                    href={job.companyUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:underline hover:text-brand"
-                  >
-                    {job.company}
-                  </a>
-                ) : (
-                  job.company
-                )
-              }
-            >
-              <div className="space-y-4 mt-2">
-                <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed text-sm">
-                  {job.description}
-                </p>
+        {loading ? (
+          <SkeletonExperienceTimeline count={3} />
+        ) : error ? (
+          <div className="text-center py-12 text-red-500 font-sans">{error}</div>
+        ) : (
+          <Timeline>
+            {experience.map((job) => (
+              <TimelineItem
+                key={job.id}
+                date={`${job.startDate} — ${job.endDate}`}
+                title={job.role}
+                subtitle={
+                  job.companyUrl ? (
+                    <a
+                      href={job.companyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline hover:text-brand"
+                    >
+                      {job.company}
+                    </a>
+                  ) : (
+                    job.company
+                  )
+                }
+              >
+                <div className="space-y-4 mt-2">
+                  <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed text-sm">
+                    {job.description}
+                  </p>
 
-                {job.achievements.length > 0 && (
-                  <ul className="list-disc pl-5 space-y-1.5 text-neutral-600 dark:text-neutral-300 text-sm font-sans">
-                    {job.achievements.map((ach, idx) => (
-                      <li key={idx} className="leading-relaxed">
-                        {ach}
-                      </li>
+                  {job.achievements.length > 0 && (
+                    <ul className="list-disc pl-5 space-y-1.5 text-neutral-600 dark:text-neutral-300 text-sm font-sans">
+                      {job.achievements.map((ach, idx) => (
+                        <li key={idx} className="leading-relaxed">
+                          {ach}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  <div className="flex flex-wrap gap-1.5 pt-2">
+                    {job.techStack.map((tech) => (
+                      <Badge key={tech} label={tech} />
                     ))}
-                  </ul>
-                )}
-
-                <div className="flex flex-wrap gap-1.5 pt-2">
-                  {job.techStack.map((tech) => (
-                    <Badge key={tech} label={tech} />
-                  ))}
+                  </div>
                 </div>
-              </div>
-            </TimelineItem>
-          ))}
-        </Timeline>
+              </TimelineItem>
+            ))}
+          </Timeline>
+        )}
       </Section>
     </div>
   );

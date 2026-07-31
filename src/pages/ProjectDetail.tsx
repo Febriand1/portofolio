@@ -6,7 +6,7 @@ import CodeBlock from '../components/CodeBlock';
 import Badge from '../components/Badge';
 import Section from '../components/Section';
 import { useLanguage } from '../hooks/useLanguage';
-import Loading from '../components/loading';
+import { SkeletonProjectDetail } from '../components/Skeletons';
 
 const ProjectDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -34,18 +34,32 @@ const ProjectDetail: React.FC = () => {
     loadProject();
   }, [id, language]);
 
-  <Loading
-    loading={loading}
-    loadingText={t('loading.detail')}
-    error={error || (!project ? 'Project specifications not found.' : null)}
-  >
-    <Link
-      to="/projects"
-      className="text-brand hover:underline font-semibold text-sm"
-    >
-      &larr; {t('project.detail.back')}
-    </Link>
-  </Loading>;
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-6">
+        <div className="pt-4">
+          <Link
+            to="/projects"
+            className="text-sm font-semibold text-brand hover:underline inline-flex items-center"
+          >
+            &larr; {t('project.detail.back')}
+          </Link>
+        </div>
+        <SkeletonProjectDetail />
+      </div>
+    );
+  }
+
+  if (error || !project) {
+    return (
+      <div className="py-24 text-center text-red-500 space-y-4">
+        <p className="font-sans">{error || 'Project specifications not found.'}</p>
+        <Link to="/projects" className="text-brand hover:underline font-semibold text-sm">
+          &larr; {t('project.detail.back')}
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">

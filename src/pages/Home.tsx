@@ -5,7 +5,7 @@ import type { Project, SkillCategory } from '../types/portfolio';
 import ProjectCard from '../components/ProjectCard';
 import Section from '../components/Section';
 import { useLanguage } from '../hooks/useLanguage';
-import Loading from '../components/loading';
+import { SkeletonProjectsGrid, SkeletonBlock } from '../components/Skeletons';
 
 const Home: React.FC = () => {
   const { language, t } = useLanguage();
@@ -35,12 +35,6 @@ const Home: React.FC = () => {
     }
     loadData();
   }, [language]);
-
-  <Loading
-    loading={loading}
-    loadingText={t('loading.profile')}
-    error={error}
-  />;
 
   return (
     <div className="space-y-6">
@@ -90,11 +84,17 @@ const Home: React.FC = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </div>
+        {loading ? (
+          <SkeletonProjectsGrid count={2} />
+        ) : error ? (
+          <div className="text-center py-8 text-red-500 font-sans">{error}</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {projects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+        )}
       </Section>
 
       {/* Technical Focus Section */}
@@ -103,28 +103,44 @@ const Home: React.FC = () => {
           {t('skills.core.title')}
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {skills.map((category) => (
-            <div
-              key={category.id}
-              className="border border-border-light/60 rounded-lg p-6 bg-neutral-light/50"
-            >
-              <h3 className="font-bold text-neutral-dark font-heading mb-4 border-b border-border-light pb-2">
-                {category.category}
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {category.skills.map((skill) => (
-                  <span
-                    key={skill.name}
-                    className="px-2.5 py-1 text-xs font-sans font-medium text-neutral-600 dark:text-neutral-300 bg-card-custom border border-border-light rounded"
-                  >
-                    {skill.name}
-                  </span>
-                ))}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="border border-border-light/60 rounded-lg p-6 bg-neutral-light/50 space-y-4">
+                <SkeletonBlock className="h-5 w-32 border-b border-border-light pb-2" />
+                <div className="flex flex-wrap gap-2 pt-2">
+                  <SkeletonBlock className="h-6 w-16 rounded" />
+                  <SkeletonBlock className="h-6 w-20 rounded" />
+                  <SkeletonBlock className="h-6 w-14 rounded" />
+                  <SkeletonBlock className="h-6 w-18 rounded" />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {skills.map((category) => (
+              <div
+                key={category.id}
+                className="border border-border-light/60 rounded-lg p-6 bg-neutral-light/50"
+              >
+                <h3 className="font-bold text-neutral-dark font-heading mb-4 border-b border-border-light pb-2">
+                  {category.category}
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {category.skills.map((skill) => (
+                    <span
+                      key={skill.name}
+                      className="px-2.5 py-1 text-xs font-sans font-medium text-neutral-600 dark:text-neutral-300 bg-card-custom border border-border-light rounded"
+                    >
+                      {skill.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </Section>
     </div>
   );
