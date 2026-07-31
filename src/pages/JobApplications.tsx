@@ -49,9 +49,9 @@ const JobApplications: React.FC = () => {
   }, [debouncedSearchTerm, selectedStatus, sortOrder]);
 
   // Load global stats (for dashboard counters)
-  const loadGlobalStats = async (forceRefresh = false) => {
+  const loadGlobalStats = async () => {
     try {
-      const data = await dataService.getJobGlobalStats(forceRefresh);
+      const data = await dataService.getJobGlobalStats();
       setGlobalStats(data);
     } catch (e) {
       console.error('Failed to load global job stats:', e);
@@ -59,7 +59,7 @@ const JobApplications: React.FC = () => {
   };
 
   // Load paginated data list based on current filters and page
-  const loadPaginatedData = async (forceRefresh = false) => {
+  const loadPaginatedData = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -69,7 +69,6 @@ const JobApplications: React.FC = () => {
         selectedStatus,
         debouncedSearchTerm,
         sortOrder,
-        forceRefresh,
       );
       setPaginatedData(response.data);
       setPaginationInfo(response.pagination);
@@ -91,10 +90,10 @@ const JobApplications: React.FC = () => {
     loadPaginatedData();
   }, [page, limit, debouncedSearchTerm, selectedStatus, sortOrder]);
 
-  // Force sync/refresh bypassing cache
+  // Sync/refresh data from API
   const handleSync = () => {
-    loadGlobalStats(true);
-    loadPaginatedData(true);
+    loadGlobalStats();
+    loadPaginatedData();
   };
 
   // Compute statistics from global list

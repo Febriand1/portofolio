@@ -9,30 +9,37 @@ const About: React.FC = () => {
   const { language, t } = useLanguage();
   const [education, setEducation] = useState<Education[]>([]);
   const [certificates, setCertificates] = useState<Certificate[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [eduLoading, setEduLoading] = useState<boolean>(true);
+  const [certLoading, setCertLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    async function loadAboutData() {
-      try {
-        setLoading(true);
-        const [loadedEducation, loadedCertificates] = await Promise.all([
-          dataService.getEducation(language),
-          dataService.getCertificates(language),
-        ]);
-        setEducation(loadedEducation);
-        setCertificates(loadedCertificates);
-      } catch (err) {
-        console.error('Failed to load about page data:', err);
-        setError(
-          t('loading.about.error') ||
-            'Unable to load professional profile details.',
-        );
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadAboutData();
+    let isMounted = true;
+    setEduLoading(true);
+    setCertLoading(true);
+
+    dataService
+      .getEducation(language)
+      .then((data) => {
+        if (isMounted) setEducation(data);
+      })
+      .catch((err) => console.error('Education load error:', err))
+      .finally(() => {
+        if (isMounted) setEduLoading(false);
+      });
+
+    dataService
+      .getCertificates(language)
+      .then((data) => {
+        if (isMounted) setCertificates(data);
+      })
+      .catch((err) => console.error('Certificates load error:', err))
+      .finally(() => {
+        if (isMounted) setCertLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [language]);
 
   const EducationSection = () => {
@@ -146,16 +153,11 @@ const About: React.FC = () => {
         </p>
       </Section>
 
-      {loading ? (
-        <SkeletonAbout />
-      ) : error ? (
-        <div className="text-center py-12 text-red-500 font-sans">{error}</div>
-      ) : (
-        <>
-          <EducationSection />
-          <CertificatesSection />
-        </>
-      )}
+      {/* Education */}
+      {eduLoading ? <SkeletonAbout count={1} /> : <EducationSection />}
+
+      {/* Certifications */}
+      {certLoading ? <SkeletonAbout count={3} /> : <CertificatesSection />}
     </div>
   );
 };
