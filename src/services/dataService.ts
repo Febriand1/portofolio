@@ -24,7 +24,10 @@ async function fetchJson<T>(url: string): Promise<T> {
 const memoryCache = new Map<string, { data: any; timestamp: number }>();
 const MEMORY_CACHE_TTL = 5 * 60 * 1000; // 5 minutes in RAM
 
-async function getCachedOrFetch<T>(key: string, fetcher: () => Promise<T>): Promise<T> {
+async function getCachedOrFetch<T>(
+  key: string,
+  fetcher: () => Promise<T>,
+): Promise<T> {
   const cached = memoryCache.get(key);
   if (cached && Date.now() - cached.timestamp < MEMORY_CACHE_TTL) {
     return cached.data as T;
@@ -58,12 +61,12 @@ export const dataService = {
     return projects.find((p) => p.id === id) || null;
   },
 
-  async getExperience(lang: string): Promise<Experience[]> {
+  async getExperience(lang: string, ascending = false): Promise<Experience[]> {
     return getCachedOrFetch(`experience_${lang}`, async () => {
       if (apiUrl) {
         try {
           return await fetchJson<Experience[]>(
-            `${apiUrl}/portofolio/experience?lang=${lang}`,
+            `${apiUrl}/portofolio/experience?lang=${lang}&ascending=${ascending}`,
           );
         } catch (err) {
           console.warn(

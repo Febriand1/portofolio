@@ -26,7 +26,7 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({
           <h3 className="text-lg font-bold font-heading text-neutral-dark leading-snug">
             {title}
           </h3>
-          <div className="text-sm font-medium text-neutral-600 dark:text-neutral-300 mt-0.5">
+          <div className="text-base font-medium text-neutral-600 dark:text-neutral-300 mt-0.5">
             {subtitle}
           </div>
         </div>

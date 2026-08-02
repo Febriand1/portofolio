@@ -24,6 +24,7 @@ export interface Project {
 
 export interface Experience {
   id: string;
+  itemId: string;
   role: string;
   company: string;
   companyUrl?: string;
@@ -34,6 +35,7 @@ export interface Experience {
   description: string;
   achievements: string[];
   techStack: string[];
+  parentId?: string; // For hierarchical experiences
 }
 
 export interface SkillItem {

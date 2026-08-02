@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { dataService } from '../services/dataService';
 import type { Experience as ExperienceType } from '../types/portfolio';
 import Timeline, { TimelineItem } from '../components/Timeline';
-import Badge from '../components/Badge';
 import Section from '../components/Section';
 import { useLanguage } from '../hooks/useLanguage';
 import { SkeletonExperienceTimeline } from '../components/Skeletons';
+import ExperienceCard from '../components/ExperienceCard';
 
 const Experience: React.FC = () => {
   const { language, t } = useLanguage();
@@ -17,7 +17,8 @@ const Experience: React.FC = () => {
     async function loadExperience() {
       try {
         setLoading(true);
-        const data = await dataService.getExperience(language);
+        const data = await dataService.getExperience(language, false);
+        console.log('Fetched experience data:', data);
         setExperience(data);
       } catch (err) {
         console.error('Failed to load experience:', err);
@@ -31,6 +32,13 @@ const Experience: React.FC = () => {
     }
     loadExperience();
   }, [language]);
+
+  const groupedExperience = experience
+    .filter((item) => item.parentId === null)
+    .map((parent) => ({
+      parent,
+      children: experience.filter((item) => item.parentId === parent.id),
+    }));
 
   return (
     <div className="space-y-6">
@@ -47,50 +55,35 @@ const Experience: React.FC = () => {
         {loading ? (
           <SkeletonExperienceTimeline count={3} />
         ) : error ? (
-          <div className="text-center py-12 text-red-500 font-sans">{error}</div>
+          <div className="text-center py-12 text-red-500 font-sans">
+            {error}
+          </div>
         ) : (
           <Timeline>
-            {experience.map((job) => (
+            {groupedExperience.map(({ parent, children }) => (
               <TimelineItem
-                key={job.id}
-                date={`${job.startDate} — ${job.endDate}`}
-                title={job.role}
-                subtitle={
-                  job.companyUrl ? (
+                key={parent.id}
+                date={`${parent.startDate} — ${parent.endDate}`}
+                title={
+                  parent.companyUrl ? (
                     <a
-                      href={job.companyUrl}
+                      href={parent.companyUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="hover:underline hover:text-brand"
                     >
-                      {job.company}
+                      {parent.company}
                     </a>
                   ) : (
-                    job.company
+                    parent.company
                   )
                 }
+                subtitle={parent.role}
               >
-                <div className="space-y-4 mt-2">
-                  <p className="text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed text-sm">
-                    {job.description}
-                  </p>
-
-                  {job.achievements.length > 0 && (
-                    <ul className="list-disc pl-5 space-y-1.5 text-neutral-600 dark:text-neutral-300 text-sm font-sans">
-                      {job.achievements.map((ach, idx) => (
-                        <li key={idx} className="leading-relaxed">
-                          {ach}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-
-                  <div className="flex flex-wrap gap-1.5 pt-2">
-                    {job.techStack.map((tech) => (
-                      <Badge key={tech} label={tech} />
-                    ))}
-                  </div>
-                </div>
+                <ExperienceCard job={parent} />
+                {children.map((child) => (
+                  <ExperienceCard key={child.id} job={child} isChild />
+                ))}
               </TimelineItem>
             ))}
           </Timeline>
