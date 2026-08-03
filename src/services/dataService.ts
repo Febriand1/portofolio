@@ -38,12 +38,12 @@ async function getCachedOrFetch<T>(
 }
 
 export const dataService = {
-  async getProjects(lang: string): Promise<Project[]> {
+  async getProjects(lang: string, ascending = false): Promise<Project[]> {
     return getCachedOrFetch(`projects_${lang}`, async () => {
       if (apiUrl) {
         try {
           return await fetchJson<Project[]>(
-            `${apiUrl}/portofolio/projects?lang=${lang}`,
+            `${apiUrl}/portofolio/projects?lang=${lang}&ascending=${ascending}`,
           );
         } catch (err) {
           console.warn(
