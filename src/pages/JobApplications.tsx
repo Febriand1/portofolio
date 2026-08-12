@@ -351,8 +351,8 @@ const JobApplications: React.FC = () => {
           <>
             <div className="overflow-x-auto border border-border-light rounded-lg bg-card-custom shadow-sm">
               {/* Desktop Table View */}
-              <table className="min-w-full divide-y divide-border-light text-left text-sm font-sans hidden sm:table">
-                <thead className="bg-neutral-light/50 text-neutral-600 dark:text-neutral-300 text-xs font-semibold uppercase tracking-wider">
+              <table className="min-w-full divide-y divide-border-light text-left text-sm font-sans hidden sm:table uppercase">
+                <thead className="bg-neutral-light/50 text-neutral-600 dark:text-neutral-300 text-xs font-semibold tracking-wider">
                   <tr>
                     <th scope="col" className="px-6 py-4">
                       {t('No')}
