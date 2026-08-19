@@ -232,15 +232,6 @@ const JobApplications: React.FC = () => {
 
       {/* Summary Stats Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
-        {/* Total */}
-        <div className="bg-card-custom border border-border-light rounded-lg p-3 flex flex-col justify-between shadow-sm">
-          <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
-            {t('jobs.stats.total')}
-          </span>
-          <span className="text-2xl font-bold font-heading text-neutral-dark mt-1">
-            {stats.total}
-          </span>
-        </div>
         {/* Today */}
         <div className="bg-card-custom border-l-4 border-l-cyan-500 border border-border-light rounded-lg p-3 flex flex-col justify-between shadow-sm">
           <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
@@ -248,6 +239,15 @@ const JobApplications: React.FC = () => {
           </span>
           <span className="text-2xl font-bold font-heading text-cyan-600 dark:text-cyan-400 mt-1">
             {stats.today}
+          </span>
+        </div>
+        {/* Total */}
+        <div className="bg-card-custom border border-border-light rounded-lg p-3 flex flex-col justify-between shadow-sm">
+          <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
+            {t('jobs.stats.total')}
+          </span>
+          <span className="text-2xl font-bold font-heading text-neutral-dark mt-1">
+            {stats.total}
           </span>
         </div>
         {/* Applied */}
