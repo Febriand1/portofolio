@@ -232,6 +232,15 @@ const JobApplications: React.FC = () => {
 
       {/* Summary Stats Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
+        {/* Total */}
+        <div className="bg-card-custom border-l-4 border-l-slate-600 dark:border-l-slate-400 border border-border-light rounded-lg p-3 flex flex-col justify-between shadow-sm">
+          <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
+            {t('jobs.stats.total')}
+          </span>
+          <span className="text-2xl font-bold font-heading text-neutral-dark mt-1">
+            {stats.total}
+          </span>
+        </div>
         {/* Today */}
         <div className="bg-card-custom border-l-4 border-l-cyan-500 border border-border-light rounded-lg p-3 flex flex-col justify-between shadow-sm">
           <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
@@ -239,15 +248,6 @@ const JobApplications: React.FC = () => {
           </span>
           <span className="text-2xl font-bold font-heading text-cyan-600 dark:text-cyan-400 mt-1">
             {stats.today}
-          </span>
-        </div>
-        {/* Total */}
-        <div className="bg-card-custom border border-border-light rounded-lg p-3 flex flex-col justify-between shadow-sm">
-          <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
-            {t('jobs.stats.total')}
-          </span>
-          <span className="text-2xl font-bold font-heading text-neutral-dark mt-1">
-            {stats.total}
           </span>
         </div>
         {/* Applied */}
@@ -260,46 +260,46 @@ const JobApplications: React.FC = () => {
           </span>
         </div>
         {/* Test */}
-        <div className="bg-card-custom border-l-4 border-l-yellow-500 border border-border-light rounded-lg p-4 flex flex-col justify-between shadow-sm">
-          <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
+        <div className="bg-card-custom border-l-4 border-l-yellow-500 border border-border-light rounded-lg p-3 flex flex-col justify-between shadow-sm">
+          <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
             {t('jobs.stats.ptest')}
           </span>
-          <span className="text-3xl font-bold font-heading text-yellow-600 dark:text-yellow-400 mt-2">
+          <span className="text-2xl font-bold font-heading text-yellow-600 dark:text-yellow-400 mt-1">
             {stats.ptest}
           </span>
         </div>
-        <div className="bg-card-custom border-l-4 border-l-orange-500 border border-border-light rounded-lg p-4 flex flex-col justify-between shadow-sm">
-          <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
+        <div className="bg-card-custom border-l-4 border-l-orange-500 border border-border-light rounded-lg p-3 flex flex-col justify-between shadow-sm">
+          <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
             {t('jobs.stats.ttest')}
           </span>
-          <span className="text-3xl font-bold font-heading text-orange-600 dark:text-orange-400 mt-2">
+          <span className="text-2xl font-bold font-heading text-orange-600 dark:text-orange-400 mt-1">
             {stats.ttest}
           </span>
         </div>
         {/* Interview */}
-        <div className="bg-card-custom border-l-4 border-l-purple-500 border border-border-light rounded-lg p-4 flex flex-col justify-between shadow-sm">
-          <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
+        <div className="bg-card-custom border-l-4 border-l-purple-500 border border-border-light rounded-lg p-3 flex flex-col justify-between shadow-sm">
+          <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
             {t('jobs.stats.interview')}
           </span>
-          <span className="text-3xl font-bold font-heading text-purple-600 dark:text-purple-400 mt-2">
+          <span className="text-2xl font-bold font-heading text-purple-600 dark:text-purple-400 mt-1">
             {stats.interview}
           </span>
         </div>
         {/* Offering */}
-        <div className="bg-card-custom border-l-4 border-l-green-500 border border-border-light rounded-lg p-4 flex flex-col justify-between shadow-sm">
-          <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
+        <div className="bg-card-custom border-l-4 border-l-green-500 border border-border-light rounded-lg p-3 flex flex-col justify-between shadow-sm">
+          <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
             {t('jobs.stats.offering')}
           </span>
-          <span className="text-3xl font-bold font-heading text-green-600 dark:text-green-400 mt-2">
+          <span className="text-2xl font-bold font-heading text-green-600 dark:text-green-400 mt-1">
             {stats.offering}
           </span>
         </div>
         {/* Rejected */}
-        <div className="bg-card-custom border-l-4 border-l-red-500 border border-border-light rounded-lg p-4 flex flex-col justify-between shadow-sm">
-          <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
+        <div className="bg-card-custom border-l-4 border-l-red-500 border border-border-light rounded-lg p-3 flex flex-col justify-between shadow-sm">
+          <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
             {t('jobs.stats.rejected')}
           </span>
-          <span className="text-3xl font-bold font-heading text-red-600 dark:text-red-400 mt-2">
+          <span className="text-2xl font-bold font-heading text-red-600 dark:text-red-400 mt-1">
             {stats.rejected}
           </span>
         </div>
