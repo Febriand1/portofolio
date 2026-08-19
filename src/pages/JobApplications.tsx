@@ -100,6 +100,7 @@ const JobApplications: React.FC = () => {
   const stats = useMemo(() => {
     return {
       total: globalStats?.Total || 0,
+      today: globalStats?.Today || 0,
       applied: globalStats?.Applied || 0,
       ptest: globalStats?.['Psychological Test'] || 0,
       ttest: globalStats?.['Technical Test'] || 0,
@@ -113,7 +114,7 @@ const JobApplications: React.FC = () => {
   const availableStatuses = useMemo(() => {
     if (!globalStats) return [];
     return Object.keys(globalStats)
-      .filter((key) => key !== 'Total')
+      .filter((key) => key !== 'Total' && key !== 'Today')
       .sort();
   }, [globalStats]);
 
@@ -230,22 +231,31 @@ const JobApplications: React.FC = () => {
       </Section>
 
       {/* Summary Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-7 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
         {/* Total */}
-        <div className="bg-card-custom border border-border-light rounded-lg p-4 flex flex-col justify-between shadow-sm">
-          <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
+        <div className="bg-card-custom border border-border-light rounded-lg p-3 flex flex-col justify-between shadow-sm">
+          <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
             {t('jobs.stats.total')}
           </span>
-          <span className="text-3xl font-bold font-heading text-neutral-dark mt-2">
+          <span className="text-2xl font-bold font-heading text-neutral-dark mt-1">
             {stats.total}
           </span>
         </div>
+        {/* Today */}
+        <div className="bg-card-custom border-l-4 border-l-cyan-500 border border-border-light rounded-lg p-3 flex flex-col justify-between shadow-sm">
+          <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
+            {t('jobs.stats.today')}
+          </span>
+          <span className="text-2xl font-bold font-heading text-cyan-600 dark:text-cyan-400 mt-1">
+            {stats.today}
+          </span>
+        </div>
         {/* Applied */}
-        <div className="bg-card-custom border-l-4 border-l-blue-500 border border-border-light rounded-lg p-4 flex flex-col justify-between shadow-sm">
-          <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
+        <div className="bg-card-custom border-l-4 border-l-blue-500 border border-border-light rounded-lg p-3 flex flex-col justify-between shadow-sm">
+          <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
             {t('jobs.stats.applied')}
           </span>
-          <span className="text-3xl font-bold font-heading text-blue-600 dark:text-blue-400 mt-2">
+          <span className="text-2xl font-bold font-heading text-blue-600 dark:text-blue-400 mt-1">
             {stats.applied}
           </span>
         </div>

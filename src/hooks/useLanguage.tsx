@@ -233,6 +233,10 @@ const translations: TranslationDictionary = {
     id: 'Total Lamaran',
     en: 'Total Applications',
   },
+  'jobs.stats.today': {
+    id: 'Hari Ini',
+    en: 'Today',
+  },
   'jobs.stats.applied': {
     id: 'Terkirim (Applied)',
     en: 'Applied',

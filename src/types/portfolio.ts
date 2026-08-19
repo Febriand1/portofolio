@@ -109,6 +109,7 @@ export interface JobStatsResponse {
     Offering: number;
     Accepted: number;
     Rejected: number;
+    Today?: number;
     Total: number;
   };
 }
