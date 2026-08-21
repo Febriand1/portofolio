@@ -76,11 +76,19 @@ export interface Social {
   iconName?: string; // To match icons
 }
 
+export interface JobPlatform {
+  id: string;
+  name: string;
+  code: string;
+}
+
 export interface JobApplication {
   id: number;
   company: string;
   position: string;
   status: string;
+  platform_id?: string;
+  job_platforms?: JobPlatform;
   created_at?: string;
   updated_at: string;
 }
