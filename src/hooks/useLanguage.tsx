@@ -221,6 +221,10 @@ const translations: TranslationDictionary = {
     id: 'Posisi',
     en: 'Position',
   },
+  'jobs.table.platform': {
+    id: 'Platform',
+    en: 'Platform',
+  },
   'jobs.table.status': {
     id: 'Status',
     en: 'Status',

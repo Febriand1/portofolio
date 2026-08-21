@@ -374,6 +374,9 @@ const JobApplications: React.FC = () => {
                       {t('jobs.table.position')}
                     </th>
                     <th scope="col" className="px-6 py-4">
+                      {t('jobs.table.platform')}
+                    </th>
+                    <th scope="col" className="px-6 py-4">
                       {t('jobs.table.status')}
                     </th>
                     <th scope="col" className="px-6 py-4">
@@ -395,6 +398,15 @@ const JobApplications: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 text-neutral-500 dark:text-neutral-400">
                         {app.position}
+                      </td>
+                      <td className="px-6 py-4">
+                        {app.job_platforms?.name ? (
+                          <span className="inline-block px-2 py-0.5 text-xs font-medium text-neutral-600 dark:text-neutral-300 bg-neutral-light/80 dark:bg-neutral-800 border border-border-light rounded">
+                            {app.job_platforms.name}
+                          </span>
+                        ) : (
+                          <span className="text-neutral-400 text-xs">-</span>
+                        )}
                       </td>
                       <td className="px-6 py-4">
                         <span
@@ -429,7 +441,14 @@ const JobApplications: React.FC = () => {
                       </span>
                     </div>
                     <div>
-                      <p className="text-sm text-neutral-500">{app.position}</p>
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-sm text-neutral-500">{app.position}</p>
+                        {app.job_platforms?.name && (
+                          <span className="px-2 py-0.5 text-[10px] font-medium text-neutral-600 dark:text-neutral-300 bg-neutral-light/80 dark:bg-neutral-800 border border-border-light rounded">
+                            {app.job_platforms.name}
+                          </span>
+                        )}
+                      </div>
                       <p className="text-[11px] text-neutral-400 mt-2">
                         {t('jobs.table.updated')}: {formatDate(app.updated_at)}
                       </p>
