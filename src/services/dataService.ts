@@ -7,6 +7,7 @@ import type {
   Social,
   PaginatedJobsResponse,
   JobStatsResponse,
+  JobPlatform,
 } from '../types/portfolio';
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -157,12 +158,16 @@ export const dataService = {
     status: string,
     search: string,
     order: string,
+    platformId?: string,
   ): Promise<PaginatedJobsResponse> {
     const params = new URLSearchParams();
     params.append('page', String(page));
     params.append('limit', String(limit));
     if (status && status !== 'all') {
       params.append('status', status);
+    }
+    if (platformId && platformId !== 'all') {
+      params.append('platform_id', platformId);
     }
     if (search && search.trim()) {
       params.append('search', search.trim());
@@ -176,6 +181,19 @@ export const dataService = {
       return result;
     }
     throw new Error('Invalid response format for paginated job applications');
+  },
+
+  async getJobPlatforms(): Promise<JobPlatform[]> {
+    try {
+      const url = `${apiUrl}/job/job-platforms`;
+      const result = await fetchJson<{ success: boolean; data: JobPlatform[] }>(url);
+      if (result && result.success && Array.isArray(result.data)) {
+        return result.data;
+      }
+    } catch (e) {
+      console.warn('Failed to fetch job platforms:', e);
+    }
+    return [];
   },
 
   async getJobGlobalStats(): Promise<JobStatsResponse['data']> {

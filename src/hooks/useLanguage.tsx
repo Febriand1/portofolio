@@ -213,6 +213,10 @@ const translations: TranslationDictionary = {
     id: 'Semua Status',
     en: 'All Statuses',
   },
+  'jobs.filter.platform.all': {
+    id: 'Semua Platform',
+    en: 'All Platforms',
+  },
   'jobs.table.company': {
     id: 'Perusahaan',
     en: 'Company',

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import Section from '../components/Section';
 import { useLanguage } from '../hooks/useLanguage';
 import { dataService } from '../services/dataService';
-import type { JobApplication, JobStatsResponse } from '../types/portfolio';
+import type { JobApplication, JobStatsResponse, JobPlatform } from '../types/portfolio';
 import SecurityPanel from '../components/SecurityPanel';
 import { useAuth } from '../hooks/useAuth';
 
@@ -19,6 +19,8 @@ const JobApplications: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>('');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
+  const [platforms, setPlatforms] = useState<JobPlatform[]>([]);
   const [sortOrder, setSortOrder] = useState<string>('desc');
 
   // Pagination state
@@ -46,7 +48,7 @@ const JobApplications: React.FC = () => {
   // Reset page to 1 when filters or search changes
   useEffect(() => {
     setPage(1);
-  }, [debouncedSearchTerm, selectedStatus, sortOrder]);
+  }, [debouncedSearchTerm, selectedStatus, selectedPlatform, sortOrder]);
 
   // Load global stats (for dashboard counters)
   const loadGlobalStats = async () => {
@@ -55,6 +57,16 @@ const JobApplications: React.FC = () => {
       setGlobalStats(data);
     } catch (e) {
       console.error('Failed to load global job stats:', e);
+    }
+  };
+
+  // Load platforms for filter dropdown
+  const loadPlatforms = async () => {
+    try {
+      const list = await dataService.getJobPlatforms();
+      setPlatforms(list);
+    } catch (e) {
+      console.error('Failed to load platforms:', e);
     }
   };
 
@@ -69,6 +81,7 @@ const JobApplications: React.FC = () => {
         selectedStatus,
         debouncedSearchTerm,
         sortOrder,
+        selectedPlatform,
       );
       setPaginatedData(response.data);
       setPaginationInfo(response.pagination);
@@ -83,16 +96,18 @@ const JobApplications: React.FC = () => {
   // Initial load
   useEffect(() => {
     loadGlobalStats();
+    loadPlatforms();
   }, []);
 
   // Fetch paginated data when parameters change
   useEffect(() => {
     loadPaginatedData();
-  }, [page, limit, debouncedSearchTerm, selectedStatus, sortOrder]);
+  }, [page, limit, debouncedSearchTerm, selectedStatus, selectedPlatform, sortOrder]);
 
   // Sync/refresh data from API
   const handleSync = () => {
     loadGlobalStats();
+    loadPlatforms();
     loadPaginatedData();
   };
 
@@ -306,7 +321,7 @@ const JobApplications: React.FC = () => {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row gap-4 py-4 border-b border-border-light">
+      <div className="flex flex-col md:flex-row gap-3 py-4 border-b border-border-light">
         {/* Search */}
         <div className="flex-1">
           <input
@@ -318,9 +333,25 @@ const JobApplications: React.FC = () => {
           />
         </div>
 
-        <div className="flex gap-2 w-full sm:w-auto">
-          {/* Filter Dropdown */}
-          <div className="flex-1 sm:w-44">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 w-full md:w-auto">
+          {/* Platform Filter Dropdown */}
+          <div className="w-full">
+            <select
+              value={selectedPlatform}
+              onChange={(e) => setSelectedPlatform(e.target.value)}
+              className="w-full px-3 py-2 border border-border-light bg-card-custom rounded focus:outline-none focus:ring-2 focus:ring-brand text-sm text-neutral-dark"
+            >
+              <option value="all">{t('jobs.filter.platform.all')}</option>
+              {platforms.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Status Filter Dropdown */}
+          <div className="w-full">
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
@@ -336,7 +367,7 @@ const JobApplications: React.FC = () => {
           </div>
 
           {/* Sort Order Dropdown */}
-          <div className="flex-1 sm:w-36">
+          <div className="w-full col-span-2 sm:col-span-1">
             <select
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
